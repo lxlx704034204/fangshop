@@ -1,0 +1,12 @@
+package com.fang.fangshop.dao;
+
+import com.fang.fangshop.been.ReportInfoModel;
+import com.fang.fangshop.core.dao.IDaoManager;
+
+import java.util.List;
+
+
+public interface IReportInfoDao extends IDaoManager<ReportInfoModel> {
+	public List<ReportInfoModel> getOrderSales(ReportInfoModel reportInfo);
+	public List<ReportInfoModel> getProductSales(ReportInfoModel reportInfo);
+}

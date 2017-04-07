@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC
+        "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="manage.express" >
+    <resultMap id="BaseResultMap" type="com.fang.fangshop.core.been.Express" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="code" property="code" jdbcType="VARCHAR" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="fee" property="fee" jdbcType="DECIMAL" />
+        <result column="order1" property="order1" jdbcType="INTEGER" />
+    </resultMap>
+    <sql id="Base_Column_List" >
+        id, code, name, fee, order1
+    </sql>
+    <select id="manage.express.selectPageList" parameterType="com.fang.fangshop.core.been.Express"
+            resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from t_express
+        order by id desc
+        limit #{offset},#{pageSize}
+    </select>
+    <select id="manage.express.selectPageCount" parameterType="com.fang.fangshop.core.been.Express"
+            resultType="Integer">
+        select
+        count(*) as total
+        from t_express
+    </select>
+    <select id="manage.express.selectById" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+        select
+        <include refid="Base_Column_List" />
+        from t_express
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="manage.express.deleteById" parameterType="java.lang.Integer" >
+        delete from t_express
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="manage.express.insert" parameterType="com.fang.fangshop.core.been.Express" >
+        insert into t_express (id, code, name,
+        fee, order1)
+        values (#{id,jdbcType=INTEGER}, #{code,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR},
+    #{fee,jdbcType=DECIMAL}, #{order1,jdbcType=INTEGER})
+    </insert>
+    <insert id="manage.express.insertSelective" parameterType="com.fang.fangshop.core.been.Express" >
+        insert into t_express
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="code != null" >
+                code,
+            </if>
+            <if test="name != null" >
+                name,
+            </if>
+            <if test="fee != null" >
+                fee,
+            </if>
+            <if test="order1 != null" >
+                order1,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+            #{id,jdbcType=INTEGER},
+            </if>
+            <if test="code != null" >
+            #{code,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null" >
+            #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="fee != null" >
+            #{fee,jdbcType=DECIMAL},
+            </if>
+            <if test="order1 != null" >
+            #{order1,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <update id="manage.express.updateById" parameterType="com.fang.fangshop.core.been.Express" >
+        update t_express
+        set code = #{code,jdbcType=VARCHAR},
+        name = #{name,jdbcType=VARCHAR},
+        fee = #{fee,jdbcType=DECIMAL},
+        order1 = #{order1,jdbcType=INTEGER}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>

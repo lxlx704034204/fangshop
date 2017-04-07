@@ -1,0 +1,66 @@
+package com.fang.fangshop.core.cache;
+
+import java.io.Serializable;
+import org.springframework.dao.DataAccessException;
+import org.springframework.data.redis.connection.RedisConnection;
+import org.springframework.data.redis.core.RedisCallback;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.RedisSerializer;
+
+/**
+ * redis缓存
+ * @author wangyantao
+ *
+ */
+public class RedisCacheProvider implements ICacheProvider {
+    private RedisTemplate<String, Serializable> redisTemplate;
+    
+	public RedisTemplate<String, Serializable> getRedisTemplate() {
+		return redisTemplate;
+	}
+
+	public void setRedisTemplate(RedisTemplate<String, Serializable> redisTemplate) {
+		this.redisTemplate = redisTemplate;
+	}
+
+	@Override
+	public void put(String key, Serializable serializable) {
+		redisTemplate.execute(new RedisCallback<Serializable>() {
+			@Override
+			public Serializable doInRedis(RedisConnection redisConnection) throws DataAccessException {
+			  RedisSerializer<Serializable> redisSerializer = (RedisSerializer<Serializable>) redisTemplate.getValueSerializer();
+			  redisConnection.set(redisTemplate.getStringSerializer().serialize(key),redisSerializer.serialize(serializable));
+			  return null;
+			}
+		});
+	}
+
+	@Override
+	public Serializable get(final String key) {
+		return redisTemplate.execute(new RedisCallback<Serializable>() {
+			@Override
+			public Serializable doInRedis(RedisConnection redisConnection) throws DataAccessException {
+			   byte[] redisKey = redisTemplate.getStringSerializer().serialize(key);
+			   if(redisConnection.exists(redisKey))
+			   {
+				   byte[] value = redisConnection.get(redisKey);
+				   Serializable serializableVal = (Serializable) redisTemplate.getValueSerializer()
+						   .deserialize(value);
+				   return serializableVal;
+			   }
+			   return null;
+			}
+		});
+	}
+
+	@Override
+	public void remove(String key) {
+		redisTemplate.delete(key);
+	}
+
+	@Override
+	public void clear() {
+		
+	}
+
+}

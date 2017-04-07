@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC 
+"-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="manage.systemSetting" >
+  <resultMap id="BaseResultMap" type="com.fang.fangshop.core.been.SystemSetting" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="systemCode" property="systemcode" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="www" property="www" jdbcType="VARCHAR" />
+    <result column="log" property="log" jdbcType="VARCHAR" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="keywords" property="keywords" jdbcType="VARCHAR" />
+    <result column="shortcuticon" property="shortcuticon" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="tel" property="tel" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="icp" property="icp" jdbcType="VARCHAR" />
+    <result column="isopen" property="isopen" jdbcType="VARCHAR" />
+    <result column="closeMsg" property="closemsg" jdbcType="VARCHAR" />
+    <result column="qq" property="qq" jdbcType="VARCHAR" />
+    <result column="imageRootPath" property="imagerootpath" jdbcType="VARCHAR" />
+    <result column="manageHttp" property="managehttp" jdbcType="VARCHAR" />
+    <result column="defaultProductImg" property="defaultproductimg" jdbcType="VARCHAR" />
+    <result column="style" property="style" jdbcType="VARCHAR" />
+    <result column="version" property="version" jdbcType="VARCHAR" />
+    <result column="manageLeftTreeLeafIcon" property="managelefttreeleaficon" jdbcType="VARCHAR" />
+    <result column="statisticsCode" property="statisticscode" jdbcType="VARCHAR" />
+    <result column="openResponsive" property="openresponsive" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.fang.fangshop.core.been.SystemSetting" extends="BaseResultMap" >
+    <result column="qqHelpHtml" property="qqhelphtml" jdbcType="LONGVARCHAR" />
+    <result column="images" property="images" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, systemCode, name, www, log, title, description, keywords, shortcuticon, address,
+    tel, email, icp, isopen, closeMsg, qq, imageRootPath, manageHttp, defaultProductImg,
+    style, version, manageLeftTreeLeafIcon, statisticsCode, openResponsive
+  </sql>
+  <sql id="Blob_Column_List" >
+    qqHelpHtml, images
+  </sql>
+  <select id="manage.systemSetting.selectById" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_systemsetting
+  </select>
+  <delete id="manage.systemSetting.deleteById" parameterType="java.lang.Integer" >
+    delete from t_systemsetting
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="manage.systemSetting.insert" parameterType="com.fang.fangshop.core.been.SystemSetting" >
+    insert into t_systemsetting (id, systemCode, name, 
+      www, log, title, description, 
+      keywords, shortcuticon, address, 
+      tel, email, icp, isopen, 
+      closeMsg, qq, imageRootPath, 
+      manageHttp, defaultProductImg, style, 
+      version, manageLeftTreeLeafIcon, statisticsCode, 
+      openResponsive, qqHelpHtml, images
+      )
+    values (#{id,jdbcType=INTEGER}, #{systemcode,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
+      #{www,jdbcType=VARCHAR}, #{log,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, 
+      #{keywords,jdbcType=VARCHAR}, #{shortcuticon,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, 
+      #{tel,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{icp,jdbcType=VARCHAR}, #{isopen,jdbcType=VARCHAR}, 
+      #{closemsg,jdbcType=VARCHAR}, #{qq,jdbcType=VARCHAR}, #{imagerootpath,jdbcType=VARCHAR}, 
+      #{managehttp,jdbcType=VARCHAR}, #{defaultproductimg,jdbcType=VARCHAR}, #{style,jdbcType=VARCHAR}, 
+      #{version,jdbcType=VARCHAR}, #{managelefttreeleaficon,jdbcType=VARCHAR}, #{statisticscode,jdbcType=VARCHAR}, 
+      #{openresponsive,jdbcType=VARCHAR}, #{qqhelphtml,jdbcType=LONGVARCHAR}, #{images,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <update id="manage.systemSetting.updateByIdWithBLOBs" parameterType="com.fang.fangshop.core.been.SystemSetting" >
+    update t_systemsetting
+    set systemCode = #{systemcode,jdbcType=VARCHAR},
+    name = #{name,jdbcType=VARCHAR},
+    www = #{www,jdbcType=VARCHAR},
+    log = #{log,jdbcType=VARCHAR},
+    title = #{title,jdbcType=VARCHAR},
+    description = #{description,jdbcType=VARCHAR},
+    keywords = #{keywords,jdbcType=VARCHAR},
+    shortcuticon = #{shortcuticon,jdbcType=VARCHAR},
+    address = #{address,jdbcType=VARCHAR},
+    tel = #{tel,jdbcType=VARCHAR},
+    email = #{email,jdbcType=VARCHAR},
+    icp = #{icp,jdbcType=VARCHAR},
+    isopen = #{isopen,jdbcType=VARCHAR},
+    closeMsg = #{closemsg,jdbcType=VARCHAR},
+    qq = #{qq,jdbcType=VARCHAR},
+    imageRootPath = #{imagerootpath,jdbcType=VARCHAR},
+    manageHttp = #{managehttp,jdbcType=VARCHAR},
+    defaultProductImg = #{defaultproductimg,jdbcType=VARCHAR},
+    style = #{style,jdbcType=VARCHAR},
+    version = #{version,jdbcType=VARCHAR},
+    manageLeftTreeLeafIcon = #{managelefttreeleaficon,jdbcType=VARCHAR},
+    statisticsCode = #{statisticscode,jdbcType=VARCHAR},
+    openResponsive = #{openresponsive,jdbcType=VARCHAR},
+    qqHelpHtml = #{qqhelphtml,jdbcType=LONGVARCHAR},
+    images = #{images,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="manage.systemSetting.updateById" parameterType="com.fang.fangshop.core.been.SystemSetting" >
+    update t_systemsetting
+    set systemCode = #{systemcode,jdbcType=VARCHAR},
+    name = #{name,jdbcType=VARCHAR},
+    www = #{www,jdbcType=VARCHAR},
+    log = #{log,jdbcType=VARCHAR},
+    title = #{title,jdbcType=VARCHAR},
+    description = #{description,jdbcType=VARCHAR},
+    keywords = #{keywords,jdbcType=VARCHAR},
+    shortcuticon = #{shortcuticon,jdbcType=VARCHAR},
+    address = #{address,jdbcType=VARCHAR},
+    tel = #{tel,jdbcType=VARCHAR},
+    email = #{email,jdbcType=VARCHAR},
+    icp = #{icp,jdbcType=VARCHAR},
+    isopen = #{isopen,jdbcType=VARCHAR},
+    closeMsg = #{closemsg,jdbcType=VARCHAR},
+    qq = #{qq,jdbcType=VARCHAR},
+    imageRootPath = #{imagerootpath,jdbcType=VARCHAR},
+    manageHttp = #{managehttp,jdbcType=VARCHAR},
+    defaultProductImg = #{defaultproductimg,jdbcType=VARCHAR},
+    style = #{style,jdbcType=VARCHAR},
+    version = #{version,jdbcType=VARCHAR},
+    manageLeftTreeLeafIcon = #{managelefttreeleaficon,jdbcType=VARCHAR},
+    statisticsCode = #{statisticscode,jdbcType=VARCHAR},
+    openResponsive = #{openresponsive,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

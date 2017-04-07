@@ -1,0 +1,80 @@
+<#import "/manage/tpl/pageBase.ftl" as page>
+<@page.pageBase currentMenu="资源管理">
+<div id="div-toolbar">
+    [<a id="treeBtn" href="#" title="展开/折叠全部资源" onclick="return false;">展开/折叠</a>]
+    <div>
+        <ul id="treeid" class="ztree"></ul>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function(){
+        getMenuList();
+        $("#treeBtn").bind("click",{type:"expandOrCollapse"},onTreeClick);
+    });
+    var expandAllFlg = true;
+    var checkAllTrueOrFalseFlg = true;
+    var setting = {
+        check: {
+            enable: false,
+            dblClickExpand: false
+        },data: {
+            simpleData: {
+                enable: true,
+                idKey: "id",
+                pIdKey: "pid",
+                rootPId: "0"
+            },
+            key: {
+                name: "name"
+            }
+        },view: {
+            fontCss: getFontCss
+        },callback: {
+            onClick: onClick
+        }
+    };
+    function onClick(e,treeId, treeNode) {
+        var zTree = $.fn.zTree.getZTreeObj("treeid");
+        zTree.expandNode(treeNode);
+    }
+    function getFontCss(treeId, treeNode) {
+        return (!!treeNode.highlight) ? {color:"#A60000", "font-weight":"bold"} : {color:"#333", "font-weight":"normal"};
+    }
+    function onTreeClick(e){
+        var zTree = $.fn.zTree.getZTreeObj("treeid"),
+                type = e.data.type,
+                nodes = zTree.getSelectedNodes();
+        if (type == "expandAll") {
+            zTree.expandAll(true);
+        } else if (type == "collapseAll") {
+            zTree.expandAll(false);
+        } else if (type == "expandOrCollapse") {
+            zTree.expandAll(expandAllFlg);
+            expandAllFlg = !expandAllFlg;
+        } else if (type == "checkAllTrueOrFalse") {
+            zTree.checkAllNodes(checkAllTrueOrFalseFlg);
+            checkAllTrueOrFalseFlg = !checkAllTrueOrFalseFlg;
+        } else {
+            if (type.indexOf("All")<0 && nodes.length == 0) {
+                alert("请先选择一个父节点");
+            }
+        }
+    }
+    function getMenuList() {
+        var data = "Random=" + encodeURI('${.now}');
+        data = data + "&rid=0";
+        data = data + "&islink=0";
+        $.ajax({
+            url: "${basepath}/manage/menu/getAllMenus",
+            cache: false,
+            type: "POST",
+            data: data,
+            dataType: "json",
+            async: true,
+            success: function (data) {
+                $.fn.zTree.init($("#treeid"), setting, data.rows);
+            }
+        });
+    }
+</script>
+</@page.pageBase>

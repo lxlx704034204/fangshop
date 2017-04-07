@@ -1,0 +1,66 @@
+package com.fang.fangshop.dao.impl;
+
+import com.fang.fangshop.core.common.PageModel;
+import com.fang.fangshop.core.dao.BaseDao;
+import com.fang.fangshop.dao.IRoleDao;
+import com.fang.fangshop.core.system.been.Role;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
+@Repository("roleDao")
+public class RoleDaoImpl implements IRoleDao{
+	
+	@Autowired
+	private BaseDao dao;
+	
+	@Override
+	public int insert(Role t) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int update(Role t) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int delete(Role t) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int deleteById(int id) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public Role selectOne(Role t) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Role> selectList(Role t) {
+		String statement="manage.user.selectList";
+		return dao.selectList(statement,t);
+	}
+	
+	@Override
+	public PageModel selectPageList(Role e) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Role selectById(String id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

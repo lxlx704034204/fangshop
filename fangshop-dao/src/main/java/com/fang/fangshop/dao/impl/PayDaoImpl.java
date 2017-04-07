@@ -1,0 +1,62 @@
+package com.fang.fangshop.dao.impl;
+
+import com.fang.fangshop.core.been.Pay;
+import com.fang.fangshop.core.common.PageModel;
+import com.fang.fangshop.core.dao.BaseDao;
+import com.fang.fangshop.dao.IPayDao;
+import org.springframework.stereotype.Repository;
+
+import javax.annotation.Resource;
+import java.util.List;
+
+@Repository("payDao")
+public class PayDaoImpl implements IPayDao {
+    @Resource
+	private BaseDao baseDao;
+	public void setBaseDao(BaseDao baseDao) {
+		this.baseDao = baseDao;
+	}
+
+	@Override
+	public int insert(Pay e) {
+		return baseDao.insert("manage.pay.insert", e);
+	}
+
+	@Override
+	public int delete(Pay e) {
+		return baseDao.delete("manage.pay.deleteById", e.getId());
+	}
+
+	@Override
+	public int update(Pay e) {
+		return baseDao.update("manage.pay.updateById", e);
+	}
+
+	@Override
+	public Pay selectOne(Pay e) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public PageModel selectPageList(Pay e) {
+		return baseDao.selectPageList("manage.pay.selectPageList",
+				"manage.pay.selectPageCount", e);
+	}
+
+	@Override
+	public List<Pay> selectList(Pay e) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int deleteById(int id) {
+		return baseDao.delete("manage.pay.deleteById", id);
+	}
+
+	@Override
+	public Pay selectById(String id) {
+		return baseDao.selectOne("manage.pay.selectById", Integer.parseInt(id));
+	}
+}

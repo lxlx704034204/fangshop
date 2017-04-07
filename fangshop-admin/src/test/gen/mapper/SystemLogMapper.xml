@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fang.fangshop.client.SystemLogMapper" >
+  <resultMap id="BaseResultMap" type="com.fang.fangshop.been.SystemLog" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="account" property="account" jdbcType="VARCHAR" />
+    <result column="loginIP" property="loginip" jdbcType="VARCHAR" />
+    <result column="logintime" property="logintime" jdbcType="TIMESTAMP" />
+    <result column="loginArea" property="loginarea" jdbcType="VARCHAR" />
+    <result column="diffAreaLogin" property="diffarealogin" jdbcType="CHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, title, content, type, account, loginIP, logintime, loginArea, diffAreaLogin
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_systemlog
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_systemlog
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.fang.fangshop.been.SystemLog" >
+    insert into t_systemlog (id, title, content, 
+      type, account, loginIP, 
+      logintime, loginArea, diffAreaLogin
+      )
+    values (#{id,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, 
+      #{type,jdbcType=INTEGER}, #{account,jdbcType=VARCHAR}, #{loginip,jdbcType=VARCHAR}, 
+      #{logintime,jdbcType=TIMESTAMP}, #{loginarea,jdbcType=VARCHAR}, #{diffarealogin,jdbcType=CHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.fang.fangshop.been.SystemLog" >
+    insert into t_systemlog
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="title != null" >
+        title,
+      </if>
+      <if test="content != null" >
+        content,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="account != null" >
+        account,
+      </if>
+      <if test="loginip != null" >
+        loginIP,
+      </if>
+      <if test="logintime != null" >
+        logintime,
+      </if>
+      <if test="loginarea != null" >
+        loginArea,
+      </if>
+      <if test="diffarealogin != null" >
+        diffAreaLogin,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="title != null" >
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="account != null" >
+        #{account,jdbcType=VARCHAR},
+      </if>
+      <if test="loginip != null" >
+        #{loginip,jdbcType=VARCHAR},
+      </if>
+      <if test="logintime != null" >
+        #{logintime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="loginarea != null" >
+        #{loginarea,jdbcType=VARCHAR},
+      </if>
+      <if test="diffarealogin != null" >
+        #{diffarealogin,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.fang.fangshop.been.SystemLog" >
+    update t_systemlog
+    set title = #{title,jdbcType=VARCHAR},
+      content = #{content,jdbcType=VARCHAR},
+      type = #{type,jdbcType=INTEGER},
+      account = #{account,jdbcType=VARCHAR},
+      loginIP = #{loginip,jdbcType=VARCHAR},
+      logintime = #{logintime,jdbcType=TIMESTAMP},
+      loginArea = #{loginarea,jdbcType=VARCHAR},
+      diffAreaLogin = #{diffarealogin,jdbcType=CHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

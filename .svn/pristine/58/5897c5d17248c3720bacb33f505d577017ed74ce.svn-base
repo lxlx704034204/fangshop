@@ -1,0 +1,8 @@
+package com.fang.fangshop.services;
+
+import com.fang.fangshop.been.SystemSettingModel;
+import com.fang.fangshop.core.service.IServices;
+
+public interface ISystemSettingService extends IServices<SystemSettingModel> {
+
+}

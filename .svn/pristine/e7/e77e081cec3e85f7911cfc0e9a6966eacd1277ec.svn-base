@@ -1,0 +1,30 @@
+package com.fang.fangshop.been;
+
+import java.io.Serializable;
+import java.util.List;
+import com.fang.fangshop.core.been.SystemSetting;
+
+public class SystemSettingModel extends SystemSetting implements Serializable
+{
+
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
+    private List<String> imagesList;//图表集合
+
+    @Override
+    public void clear() {
+        super.clear();
+        clearList(imagesList);
+    }
+
+    public List<String> getImagesList() {
+        return imagesList;
+    }
+
+    public void setImagesList(List<String> imagesList) {
+        this.imagesList = imagesList;
+    }
+
+}

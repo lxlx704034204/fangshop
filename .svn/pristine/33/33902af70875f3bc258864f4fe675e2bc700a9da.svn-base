@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC 
+"-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="manage.user">
+	<resultMap type="com.fang.fangshop.core.system.been.User" id="userMap">
+		<id column="id" property="id"/>
+		<result column="username" property="username"/>
+		<result column="password" property="password"/>
+		<result column="status" property="status"/>
+		<result column="nickname" property="nickname"/>
+		<result column="email" property="email"/>
+		<result column="rid" property="rid"/>
+		<result column="createAccount" property="createaccount"/>
+		<result column="createtime" property="createtime"/>
+		<result column="updatetime" property="updatetime"/>
+		<result column="updateAccount" property="updateaccount"/>
+		<result column="deleted" property="deleted"/>
+		<association property="role" column="rid" javaType="com.fang.fangshop.core.system.been.Role">
+			<id column="id" property="id"/>
+			<result column="role_name" property="rolename"/>
+			<result column="role_desc" property="roledesc"/>
+			<result column="role_dbPrivilege" property="roledbprivilege"/>
+			<result column="status" property="status"/>
+		</association>
+	</resultMap>
+	<!-- 查询单个用户 -->
+	<select id="manage.user.selectOne" parameterType="com.fang.fangshop.core.system.been.User" resultMap="userMap">
+		select * from t_user u ,t_role r where u.rid=r.id and u.deleted=0
+		<if test="id !=null and id!='' ">
+			and u.id=#{id}
+		</if>
+		<if test="username !=null and username !='' ">
+			and u.username= #{username}
+		</if>
+		<if test="password !=null and password !='' ">
+			and u.password= #{password}
+		</if>
+	</select>
+	<!-- 查询所有用户 -->
+	<select id="manage.user.selectList" parameterType="com.fang.fangshop.core.system.been.User"  resultMap="userMap">
+		select * from t_user u ,t_role r where u.rid=r.id and u.deleted=0
+		<if test="status!=null and status != ''">
+			and u.status = #{status}
+		</if>
+		 order by u.id desc limit #{offset},#{pageSize} 
+	</select>
+	<!-- 查询列表总记录数 -->
+	<select id="manage.user.selectTotalCount" parameterType="com.fang.fangshop.core.system.been.User" resultType="Integer">
+		select count(*) total from t_user u ,t_role r where u.rid=r.id and u.deleted=0
+		<if test="status!=null and status != ''">
+			and u.status = #{status}
+		</if>
+		order by u.id desc
+	</select>
+	<!-- 新增 -->
+	<insert id="manage.user.addUser" parameterType="com.fang.fangshop.core.system.been.User">
+		INSERT INTO t_user (username,PASSWORD,createtime,createAccount,STATUS,rid,nickname,email) VALUES (
+			#{username},#{password},NOW(),#{createaccount},#{status},#{rid},#{nickname},#{email}
+		)
+	</insert>
+	<!-- 修改  (删除也是调用此sql，只是修改状态而已)-->
+	<update id="manage.user.updateUser" parameterType="com.fang.fangshop.core.system.been.User">
+		UPDATE t_user SET password = #{password} , status = #{status} , rid = #{rid} , 
+		nickname = #{nickname} , email  = #{email} , updatetime = NOW() , updateAccount = #{updateaccount}
+		where id = #{id}
+	</update>
+	<select id="manage.user.getByField" parameterType="com.fang.fangshop.core.system.been.User" resultType="int">
+        SELECT COUNT(*) FROM t_user
+        WHERE username=#{username} or nickname=#{nickname}
+	</select>
+    <select id="manage.user.updateById" parameterType="java.lang.Integer" resultType="int">
+        UPDATE t_user set deleted=1
+        WHERE id=#{id}
+    </select>
+</mapper>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/fangshop-admin/fangshop-admin.iml" filepath="$PROJECT_DIR$/fangshop-admin/fangshop-admin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/fangshop-core/fangshop-core.iml" filepath="$PROJECT_DIR$/fangshop-core/fangshop-core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/fangshop-dao/fangshop-dao.iml" filepath="$PROJECT_DIR$/fangshop-dao/fangshop-dao.iml" />
+      <module fileurl="file://$PROJECT_DIR$/fangshop-parent.iml" filepath="$PROJECT_DIR$/fangshop-parent.iml" />
+      <module fileurl="file://$PROJECT_DIR$/fangshop-services/fangshop-services.iml" filepath="$PROJECT_DIR$/fangshop-services/fangshop-services.iml" />
+      <module fileurl="file://$PROJECT_DIR$/fangshop-web/fangshop-web.iml" filepath="$PROJECT_DIR$/fangshop-web/fangshop-web.iml" />
+    </modules>
+  </component>
+</project>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC 
+"-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="role">
+	<resultMap type="com.fang.fangshop.core.system.bean.Role" id="roleMap">
+		<id column="id" property="id"/>
+		<result column="role_name" property="rolename"/>
+		<result column="role_desc" property="roledesc"/>
+		<result column="role_dbPrivilege" property="roledbprivilege"/>
+		<result column="status" property="status"/>
+	</resultMap>
+	
+	<select id="role.selectOne" parameterType="com.fang.fangshop.core.system.bean.Role" resultMap="roleMap">
+		SELECT * FROM t_role 
+		<if test="id != null and id != ''">
+			WHERE id= #{id}
+		</if> 
+	</select>
+	
+	<select id="role.selectList" parameterType="com.fang.fangshop.core.system.bean.Role" resultMap="roleMap">
+		SELECT * FROM t_role
+	</select>
+</mapper>

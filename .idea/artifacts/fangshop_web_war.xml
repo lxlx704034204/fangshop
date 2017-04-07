@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="fangshop-web:war">
+    <output-path>$PROJECT_DIR$/fangshop-web/target</output-path>
+    <root id="archive" name="fangshop-web.war">
+      <element id="artifact" artifact-name="fangshop-web:war exploded" />
+    </root>
+  </artifact>
+</component>

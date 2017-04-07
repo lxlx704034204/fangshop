@@ -1,0 +1,58 @@
+package com.fang.fangshop.core.common;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import com.fang.fangshop.core.bean.Catalog;
+
+/**
+ * 将集合转换成树形结构（带有父子关系的集合）
+ * @author hmx
+ *
+ */
+public class ConvertListToTreeData { 
+	/*
+	public static void main(String[] args) {
+		List<Catalog> list = new ArrayList<Catalog>();
+		list.add(new Catalog(1, "a", 0, 1, "", "a", "y"));
+		list.add(new Catalog(2, "b", 0, 1, "", "b", "y"));
+		list.add(new Catalog(3, "c", 0, 1, "", "c", "y"));
+		list.add(new Catalog(4, "d", 0, 1, "", "d", "y"));
+		list.add(new Catalog(5, "aa", 1, 1, "", "aa", "y"));
+		list.add(new Catalog(6, "ab", 1, 1, "", "ab", "y"));
+		list.add(new Catalog(7, "ac", 1, 1, "", "ac", "y"));
+		list.add(new Catalog(8, "ba", 2, 1, "", "ba", "y"));
+		list.add(new Catalog(9, "bb", 2, 1, "", "bb", "y"));
+		list.add(new Catalog(10, "ca", 3, 1, "", "ca", "y"));
+		List<Catalog> res = getTreeData(list);
+		System.out.println(res);
+	}
+	*/
+	
+	/**
+	 * 将商品类别分组
+	 * @param catalogs
+	 * @return
+	 */
+	public static List<Catalog> getTreeData(List<Catalog> catalogs){
+		List<Catalog> result = new ArrayList<Catalog>();
+		for(int i=0;i<catalogs.size();i++){
+			Catalog catalog = catalogs.get(i); 
+			catalog.setChildren(new ArrayList<Catalog>());
+			catalogs.remove(i);
+			if(catalog.getPid()==0){
+				for(int j=0;j<catalogs.size();j++){
+					Catalog childCatalog = catalogs.get(j);
+					if(childCatalog.getPid()==catalog.getId()){
+						catalog.getChildren().add(childCatalog);
+						catalogs.remove(j);
+						j--;
+					}
+				}
+			}
+			result.add(catalog);
+			i--;
+		} 
+		return result;
+	}
+}

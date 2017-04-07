@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC 
+"-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="manage.orderShip">
+	<resultMap id="BaseResultMap" type="com.fang.fangshop.bean.OrderShip" >
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="orderid" property="orderid" jdbcType="VARCHAR" />
+		<result column="shipname" property="shipname" jdbcType="VARCHAR" />
+		<result column="shipaddress" property="shipaddress" jdbcType="VARCHAR" />
+		<result column="provinceCode" property="provincecode" jdbcType="VARCHAR" />
+		<result column="province" property="province" jdbcType="VARCHAR" />
+		<result column="cityCode" property="citycode" jdbcType="VARCHAR" />
+		<result column="city" property="city" jdbcType="VARCHAR" />
+		<result column="areaCode" property="areacode" jdbcType="VARCHAR" />
+		<result column="area" property="area" jdbcType="VARCHAR" />
+		<result column="phone" property="phone" jdbcType="VARCHAR" />
+		<result column="tel" property="tel" jdbcType="VARCHAR" />
+		<result column="zip" property="zip" jdbcType="VARCHAR" />
+		<result column="sex" property="sex" jdbcType="VARCHAR" />
+		<result column="remark" property="remark" jdbcType="VARCHAR" />
+	</resultMap>
+	<select id="manage.orderShip.selectById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+		SELECT id, orderid, shipname, shipaddress, provinceCode, province, cityCode, city, areaCode, 
+		 	   area, phone, tel, zip, sex, remark
+		FROM t_ordership t
+		WHERE 1=1
+		<if test="_parameter!=null and _parameter!=''">
+			and orderid=#{_parameter}
+		</if>	     
+	</select>
+	<insert id="manage.orderShip.insert" parameterType="com.fang.fangshop.bean.OrderShip" >
+	  insert into t_ordership (id, orderid, shipname, 
+	    shipaddress, provinceCode, province, 
+	    cityCode, city, areaCode, 
+	    area, phone, tel, zip, 
+	    sex, remark)
+	  values (#{id,jdbcType=INTEGER}, #{orderid,jdbcType=VARCHAR}, #{shipname,jdbcType=VARCHAR}, 
+	    #{shipaddress,jdbcType=VARCHAR}, #{provincecode,jdbcType=VARCHAR}, #{province,jdbcType=VARCHAR}, 
+	    #{citycode,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR}, #{areacode,jdbcType=VARCHAR}, 
+	    #{area,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{tel,jdbcType=VARCHAR}, #{zip,jdbcType=VARCHAR}, 
+	    #{sex,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR})
+	</insert>
+	<update id="manage.orderShip.updateById" parameterType="com.fang.fangshop.bean.OrderShip" >
+	  update t_ordership
+	  set orderid = #{orderid,jdbcType=VARCHAR},
+	    shipname = #{shipname,jdbcType=VARCHAR},
+	    shipaddress = #{shipaddress,jdbcType=VARCHAR},
+	    provinceCode = #{provincecode,jdbcType=VARCHAR},
+	    province = #{province,jdbcType=VARCHAR},
+	    cityCode = #{citycode,jdbcType=VARCHAR},
+	    city = #{city,jdbcType=VARCHAR},
+	    areaCode = #{areacode,jdbcType=VARCHAR},
+	    area = #{area,jdbcType=VARCHAR},
+	    phone = #{phone,jdbcType=VARCHAR},
+	    tel = #{tel,jdbcType=VARCHAR},
+	    zip = #{zip,jdbcType=VARCHAR},
+	    sex = #{sex,jdbcType=VARCHAR},
+	    remark = #{remark,jdbcType=VARCHAR}
+	  where id = #{id,jdbcType=INTEGER}
+	</update>
+</mapper>

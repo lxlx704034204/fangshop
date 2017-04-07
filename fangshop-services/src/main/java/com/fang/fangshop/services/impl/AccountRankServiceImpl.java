@@ -1,0 +1,17 @@
+//package com.fang.fangshop.services.impl;
+//
+//import javax.annotation.Resource;
+//import com.fang.fangshop.core.been.AccountRank;
+//import com.fang.fangshop.core.service.ServicesManager;
+//import com.fang.fangshop.dao.IAccountRankDao;
+//import org.springframework.stereotype.Service;
+//import com.fang.fangshop.services.IAccountRankService;
+//
+//@Service("accountRankService")
+//public class AccountRankServiceImpl extends ServicesManager<AccountRank, IAccountRankDao> implements IAccountRankService {
+//	@Resource(name="accountRankDao")
+//	@Override
+//	protected void setDao(IAccountRankDao dao) {
+//		this.dao=dao;
+//	}
+//}

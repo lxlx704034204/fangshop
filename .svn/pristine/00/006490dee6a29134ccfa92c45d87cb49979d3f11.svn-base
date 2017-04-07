@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC
+"-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="manage.product">
+	<resultMap type="com.fang.fangshop.core.bean.Product" id="productMap">
+		<id column="id" property="id" />
+		<result column="name" property="name" />
+		<result column="introduce" property="introduce" />
+		<result column="price" property="price" />
+		<result column="nowPrice" property="nowPrice" />
+		<result column="picture" property="picture" />
+		<result column="createtime" property="createtime" />
+		<result column="createAccount" property="createAccount" />
+		<result column="updateAccount" property="updateAccount" />
+		<result column="updatetime" property="updatetime" />
+		<result column="isnew" property="isnew" />
+		<result column="sale" property="sale" />
+		<result column="hit" property="hit" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+		<result column="maxPicture" property="maxPicture" jdbcType="VARCHAR" />
+		<result column="images" property="images" jdbcType="VARCHAR" />
+		<result column="catalogID" property="catalogID" jdbcType="VARCHAR" />
+		<result column="sellcount" property="sellcount" jdbcType="INTEGER" />
+		<result column="stock" property="stock" jdbcType="INTEGER" />
+		<result column="searchKey" property="searchKey" jdbcType="VARCHAR" />
+		<result column="title" property="title" jdbcType="VARCHAR" />
+		<result column="description" property="description" jdbcType="VARCHAR" />
+		<result column="keywords" property="keywords" jdbcType="VARCHAR" />
+		<result column="activityID" property="activityID" jdbcType="VARCHAR" />
+		<result column="unit" property="unit" jdbcType="VARCHAR" />
+		<result column="score" property="score" jdbcType="INTEGER" />
+		<result column="isTimePromotion" property="isTimePromotion"
+			jdbcType="CHAR" />
+		<result column="giftID" property="giftID" jdbcType="VARCHAR" />
+
+	</resultMap>
+
+	<insert id="product.insert" parameterType="com.fang.fangshop.core.bean.Product">
+		insert into t_product
+		<trim prefix="(" suffix=")" suffixOverrides=","> 
+			<if test="name != null">
+				name,
+			</if>
+			<if test="introduce != null">
+				introduce,
+			</if>
+			<if test="price != null">
+				price,
+			</if>
+			<if test="nowprice != null">
+				nowPrice,
+			</if>
+			<if test="picture != null">
+				picture,
+			</if>
+			<if test="createtime != null">
+				createtime,
+			</if>
+			<if test="createaccount != null">
+				createAccount,
+			</if>
+			<if test="updateaccount != null">
+				updateAccount,
+			</if>
+			<if test="updatetime != null">
+				updatetime,
+			</if>
+			<if test="isnew != null">
+				isnew,
+			</if>
+			<if test="sale != null">
+				sale,
+			</if>
+			<if test="hit != null">
+				hit,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+			<if test="maxpicture != null">
+				maxPicture,
+			</if>
+			<if test="images != null">
+				images,
+			</if>
+			<if test="catalogid != null">
+				catalogID,
+			</if> 
+			<if test="stock != null">
+				stock,
+			</if>
+			<if test="searchkey != null">
+				searchKey,
+			</if>
+			<if test="title != null">
+				title,
+			</if>
+			<if test="description != null">
+				description,
+			</if>
+			<if test="keywords != null">
+				keywords,
+			</if>
+			<if test="activityid != null">
+				activityID,
+			</if>
+			<if test="unit != null">
+				unit,
+			</if>
+			<if test="score != null">
+				score,
+			</if>
+			<if test="istimepromotion != null">
+				isTimePromotion,
+			</if>
+			<if test="giftid != null">
+				giftID,
+			</if>
+			<if test="producthtml != null">
+				productHTML,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=","> 
+			<if test="name != null">
+				#{name,jdbcType=VARCHAR},
+			</if>
+			<if test="introduce != null">
+				#{introduce,jdbcType=VARCHAR},
+			</if>
+			<if test="price != null">
+				#{price,jdbcType=DECIMAL},
+			</if>
+			<if test="nowprice != null">
+				#{nowPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="picture != null">
+				#{picture,jdbcType=VARCHAR},
+			</if>
+			<if test="createtime != null">
+				#{createtime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createaccount != null">
+				#{createAccount,jdbcType=VARCHAR},
+			</if>
+			<if test="updateaccount != null">
+				#{updateAccount,jdbcType=VARCHAR},
+			</if>
+			<if test="updatetime != null">
+				#{updatetime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="isnew != null">
+				#{isnew,jdbcType=CHAR},
+			</if>
+			<if test="sale != null">
+				#{sale,jdbcType=CHAR},
+			</if>
+			<if test="hit != null">
+				#{hit,jdbcType=INTEGER},
+			</if>
+			<if test="status != null">
+				#{status,jdbcType=INTEGER},
+			</if>
+			<if test="maxpicture != null">
+				#{maxPicture,jdbcType=VARCHAR},
+			</if>
+			<if test="images != null">
+				#{images,jdbcType=VARCHAR},
+			</if>
+			<if test="catalogid != null">
+				#{catalogID,jdbcType=VARCHAR},
+			</if> 
+			<if test="stock != null">
+				#{stock,jdbcType=INTEGER},
+			</if>
+			<if test="searchkey != null">
+				#{searchKey,jdbcType=VARCHAR},
+			</if>
+			<if test="title != null">
+				#{title,jdbcType=VARCHAR},
+			</if>
+			<if test="description != null">
+				#{description,jdbcType=VARCHAR},
+			</if>
+			<if test="keywords != null">
+				#{keywords,jdbcType=VARCHAR},
+			</if>
+			<if test="activityid != null">
+				#{activityID,jdbcType=VARCHAR},
+			</if>
+			<if test="unit != null">
+				#{unit,jdbcType=VARCHAR},
+			</if>
+			<if test="score != null">
+				#{score,jdbcType=INTEGER},
+			</if>
+			<if test="istimepromotion != null">
+				#{isTimePromotion,jdbcType=CHAR},
+			</if>
+			<if test="giftid != null">
+				#{giftID,jdbcType=VARCHAR},
+			</if>
+			<if test="producthtml != null">
+				#{productHtml,jdbcType=LONGVARCHAR},
+			</if>
+		</trim>
+	</insert>
+
+</mapper> 
+
+

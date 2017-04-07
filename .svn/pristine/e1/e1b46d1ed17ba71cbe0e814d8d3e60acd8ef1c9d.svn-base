@@ -1,0 +1,103 @@
+package com.fang.fangshop.core.system.been;
+import com.fang.fangshop.core.cache.RedisCache;
+import com.fang.fangshop.core.cache.RedisFieldNotCache;
+
+@RedisCache
+public class Menu {
+	@RedisFieldNotCache
+	private static final String className = "menu";
+	@RedisFieldNotCache
+	private static final String primaryKey = "id";
+	
+	private Integer id;
+	/** t_menu.pid */
+    private Integer pid;
+
+    /** t_menu.url */
+    private String url;
+
+    /** 111 */
+    private String name;
+
+    /** t_menu.orderNum */
+    private Integer orderNum;
+
+    /** t_menu.type */
+    private String type;
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+    public Integer getPid() {
+        return pid;
+    }
+
+    public void setPid(Integer pid) {
+        this.pid = pid;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url == null ? null : url.trim();
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name == null ? null : name.trim();
+    }
+
+    public Integer getOrderNum() {
+        return orderNum;
+    }
+
+    public void setOrderNum(Integer orderNum) {
+        this.orderNum = orderNum;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type == null ? null : type.trim();
+    }
+    
+    public void clear() {
+		pid = null;
+		url = null;
+		name = null;
+		orderNum = 0;
+		type = null;
+	}
+
+	@Override
+	public String toString() {
+		return "Menu [pid=" + pid + ", url=" + url + ", name=" + name + ", orderNum=" + orderNum + ", type=" + type
+				+ "]";
+	}
+
+	public Menu(Integer id, Integer pid, String url, String name, Integer orderNum, String type) {
+		super();
+		this.id = id;
+		this.pid = pid;
+		this.url = url;
+		this.name = name;
+		this.orderNum = orderNum;
+		this.type = type;
+	}
+
+	public Menu() {
+		super();
+	}
+}

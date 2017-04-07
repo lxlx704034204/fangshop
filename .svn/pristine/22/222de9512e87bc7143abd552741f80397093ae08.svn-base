@@ -1,0 +1,9 @@
+package com.fang.fangshop.dao;
+
+import com.fang.fangshop.core.dao.IDaoManager;
+import com.fang.fangshop.system.been.User;
+
+
+public interface IUserDao extends IDaoManager<User> {
+
+}

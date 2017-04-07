@@ -1,0 +1,10 @@
+package com.fang.fangshop.core.cache;
+
+/**
+ * 
+ * @author wangyantao
+ *
+ */
+public enum RedisDataBaseType {
+	defaultType
+}

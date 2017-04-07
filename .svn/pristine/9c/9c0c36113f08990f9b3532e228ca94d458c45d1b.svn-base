@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="manage.commenttype">
+	<resultMap id="BaseResultMap" type="com.fang.fangshop.bean.CommentType">
+		<id column="id" property="id" jdbcType="INTEGER" />
+	    <result column="name" property="name" jdbcType="VARCHAR" />
+	    <result column="code" property="code" jdbcType="VARCHAR" />
+	    <result column="status" property="status" jdbcType="VARCHAR" />
+	</resultMap>
+	<select id="manage.commenttype.selectPageList" parameterType="com.fang.fangshop.bean.CommentType"
+		resultMap="BaseResultMap">
+		select id, name, code, status
+		from t_commenttype
+		order by Id desc
+		limit #{offset},#{pageSize}
+	</select>
+	<select id="manage.commenttype.selectPageCount" parameterType="com.fang.fangshop.bean.CommentType"
+		resultType="Integer">
+		select count(1) as total
+		from t_commenttype
+	</select>
+</mapper>

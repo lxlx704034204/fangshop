@@ -1,0 +1,75 @@
+package com.fang.fangshop.dao.impl;
+
+import com.fang.fangshop.been.AreaModel;
+import com.fang.fangshop.core.common.PageModel;
+import com.fang.fangshop.core.dao.BaseDao;
+import com.fang.fangshop.dao.IAreaDao;
+import org.springframework.stereotype.Repository;
+
+import javax.annotation.Resource;
+import java.util.List;
+
+@Repository("areaDao")
+public class AreaDaoImpl implements IAreaDao {
+	@Resource
+	private BaseDao baseDao;
+	public void setBaseDao(BaseDao baseDao) {
+		this.baseDao = baseDao;
+	}
+	
+	@Override
+	public int insert(AreaModel e) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int delete(AreaModel e) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int update(AreaModel e) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public AreaModel selectOne(AreaModel e) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public PageModel selectPageList(AreaModel e) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<AreaModel> selectList(AreaModel e) {
+		return null;
+	}
+
+	@Override
+	public int deleteById(int id) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public AreaModel selectById(String id) {
+		return baseDao.selectOne("manage.area.selectById", id);
+	}
+
+	@Override
+	public List<AreaModel> getListAll() {
+		return baseDao.selectList("manage.area.selectAll");
+	}
+
+	@Override
+	public List<AreaModel> getAreaByCode(String code) {
+		return baseDao.selectList("manage.area.selectByCode", code);
+	}
+}

@@ -1,0 +1,16 @@
+package com.fang.fangshop.web.controller;
+
+import com.fang.fangshop.core.system.been.Menu;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import com.fang.fangshop.services.IMenuService;
+import com.fang.fangshop.web.framework.BaseController;
+
+@Controller
+@RequestMapping("/menu/")
+public class MenuController extends BaseController {
+    @Autowired
+	private IMenuService menuService;
+
+}

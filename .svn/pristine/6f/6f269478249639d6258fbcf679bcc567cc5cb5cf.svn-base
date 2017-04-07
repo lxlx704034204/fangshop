@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC 
+"-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="manage.area">
+	<resultMap id="BaseResultMap" type="com.fang.fangshop.bean.Area" >
+	    <id column="id" property="id" jdbcType="INTEGER" />
+	    <result column="code" property="code" jdbcType="VARCHAR" />
+	    <result column="pcode" property="pcode" jdbcType="VARCHAR" />
+	    <result column="name" property="name" jdbcType="VARCHAR" />
+	    <result column="desc1" property="desc1" jdbcType="VARCHAR" />
+	    <result column="layer" property="layer" jdbcType="INTEGER" />
+	</resultMap>
+	<select id="manage.area.selectAll" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+	    select id, code, pcode, name, desc1,layer
+	    from t_area
+	    ORDER BY CONVERT(NAME USING gbk) 
+  	</select>
+	<select id="manage.area.selectById" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+	    select id, code, pcode, name, desc1,layer
+	    from t_area
+	    where id = #{_parameter}
+  	</select>
+  	<select id="manage.area.selectByCode" resultMap="BaseResultMap" parameterType="java.lang.String" >
+	    select id, code, pcode, name, desc1,layer
+	    from t_area
+	    where pcode = #{code}
+	    ORDER BY CONVERT(NAME USING gbk) 
+  	</select>
+</mapper>

@@ -1,0 +1,9 @@
+package com.fang.fangshop.dao;
+
+
+import com.fang.fangshop.core.dao.IDaoManager;
+import com.fang.fangshop.system.been.Role;
+
+public interface IRoleDao extends IDaoManager<Role> {
+
+}

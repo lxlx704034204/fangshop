@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC 
+"-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="manage.order">
+    <resultMap id="OrderMap" type="com.fang.fangshop.bean.Order" >
+	    <id column="id" property="id" jdbcType="INTEGER" />
+	    <result column="account" property="account" jdbcType="VARCHAR" />
+	    <result column="payType" property="paytype" jdbcType="INTEGER" />
+	    <result column="carry" property="carry" jdbcType="INTEGER" />
+	    <result column="rebate" property="rebate" jdbcType="DECIMAL" />
+	    <result column="createdate" property="createdate" jdbcType="TIMESTAMP" />
+	    <result column="status" property="status" jdbcType="VARCHAR" />
+	    <result column="refundStatus" property="refundstatus" jdbcType="VARCHAR" />
+	    <result column="amount" property="amount" jdbcType="DECIMAL" />
+	    <result column="fee" property="fee" jdbcType="DECIMAL" />
+	    <result column="ptotal" property="ptotal" jdbcType="DECIMAL" />
+	    <result column="quantity" property="quantity" jdbcType="INTEGER" />
+	    <result column="paystatus" property="paystatus" jdbcType="VARCHAR" />
+	    <result column="updateAmount" property="updateamount" jdbcType="VARCHAR" />
+	    <result column="expressCode" property="expresscode" jdbcType="VARCHAR" />
+	    <result column="expressName" property="expressname" jdbcType="VARCHAR" />
+	    <result column="otherRequirement" property="otherrequirement" jdbcType="VARCHAR" />
+	    <result column="remark" property="remark" jdbcType="VARCHAR" />
+	    <result column="expressNo" property="expressno" jdbcType="VARCHAR" />
+	    <result column="expressCompanyName" property="expresscompanyname" jdbcType="VARCHAR" />
+	    <result column="lowStocks" property="lowstocks" jdbcType="VARCHAR" />
+	    <result column="confirmSendProductRemark" property="confirmsendproductremark" jdbcType="VARCHAR" />
+	    <result column="closedComment" property="closedcomment" jdbcType="VARCHAR" />
+	    <result column="score" property="score" jdbcType="INTEGER" />
+    </resultMap>
+    <resultMap type="com.fang.fangshop.bean.Order" id="OrderByIdMap" extends="OrderMap">
+        <association property="orderShip" column="id" select="manage.order.selectShipByOrderId"></association>
+        <collection property="orderPays" column="id" select="manage.order.selectPayByOrderId"></collection>
+        <collection property="orderDetails" column="id" select="manage.order.selectDetailByOrderId"></collection>
+        <collection property="orderLogs" column="id" select="manage.order.selectLogByOrderId"></collection>
+    </resultMap>
+    <resultMap id="OrdersMap" type="com.fang.fangshop.bean.OrdersReport" >
+	    <result column="nopayCount" property="nopayCount" jdbcType="INTEGER" />
+	    <result column="payNoAuditCount" property="payNoAuditCount" jdbcType="INTEGER" />
+	    <result column="payCancelCount" property="payCancelCount" jdbcType="INTEGER" />
+	    <result column="passCount" property="passCount" jdbcType="INTEGER" />
+	    <result column="sellerAgreeCount" property="sellerAgreeCount" jdbcType="INTEGER" />
+	    <result column="sellerConfirmGoodsCount" property="sellerConfirmGoodsCount" jdbcType="INTEGER" />
+	    <result column="sellerRefuseCount" property="sellerRefuseCount" jdbcType="INTEGER" />
+	    <result column="buyerRefuseCount" property="buyerRefuseCount" jdbcType="INTEGER" />
+    </resultMap>
+	<select id="manage.order.selectPageList" parameterType="com.fang.fangshop.bean.Order" resultMap="OrderMap">
+		 select id, account, payType, carry, rebate, createdate, status, refundStatus, amount, fee, 
+			    ptotal, quantity, paystatus, updateAmount, expressCode, expressName, otherRequirement, 
+			    remark, expressNo, expressCompanyName, lowStocks, confirmSendProductRemark, closedComment, 
+			    score
+		from t_order t
+		where 1=1
+		<if test="id!=null and id!=''">
+			and id=#{id}
+		</if>
+		<if test="status!=null and status!=''">
+			and status=#{status}
+		</if>
+		<if test="account!=null and account!=''">
+			and account=#{account}
+		</if>
+		<if test="paystatus!=null and paystatus!=''">
+			and paystatus=#{paystatus}
+		</if>
+		<if test="refundstatus!=null and refundstatus!=''">
+			and refundstatus=#{refundstatus}
+		</if>
+		<if test="startDate!=null and startDate!=''">
+			and createdate &gt;= #{startDate}
+		</if>
+		<if test="endDate!=null and endDate!=''">
+			and createdate &lt;= #{endDate}
+		</if>
+		order by createdate desc
+		limit #{offset},#{pageSize} 
+	</select>
+	<select id="manage.order.selectPageCount" parameterType="com.fang.fangshop.bean.Order"
+		resultType="Integer">
+		select count(1) as total
+		from t_order t
+		where 1=1
+		<if test="id!=null and id!=''">
+			and id=#{id}
+		</if>
+		<if test="status!=null and status!=''">
+			and status=#{status}
+		</if>
+		<if test="account!=null and account!=''">
+			and account=#{account}
+		</if>
+		<if test="paystatus!=null and paystatus!=''">
+			and paystatus=#{paystatus}
+		</if>
+		<if test="refundstatus!=null and refundstatus!=''">
+			and refundstatus=#{refundstatus}
+		</if>
+		<if test="startDate!=null and startDate!=''">
+			and createdate &gt;= #{startDate}
+		</if>
+		<if test="endDate!=null and endDate!=''">
+			and createdate &lt;= #{endDate}
+		</if>
+	</select>
+	<select id="manage.order.selectByOrderId" parameterType="java.lang.Integer" resultMap="OrderMap">
+		SELECT id, account, payType, carry, rebate, createdate, STATUS, refundStatus, amount, fee, 
+			    ptotal, quantity, paystatus, updateAmount, expressCode, expressName, otherRequirement, 
+			    remark, expressNo, expressCompanyName, lowStocks, confirmSendProductRemark, closedComment, 
+			    score
+		FROM t_order t
+		WHERE 1=1
+		<if test="_parameter!=null and _parameter!=''">
+			and id=#{_parameter}
+		</if>	     
+	</select>
+	<select id="manage.order.selectById" parameterType="java.lang.Integer" resultMap="OrderByIdMap">
+		SELECT id, account, payType, carry, rebate, createdate, STATUS, refundStatus, amount, fee, 
+			    ptotal, quantity, paystatus, updateAmount, expressCode, expressName, otherRequirement, 
+			    remark, expressNo, expressCompanyName, lowStocks, confirmSendProductRemark, closedComment, 
+			    score
+		FROM t_order t
+		WHERE 1=1
+		<if test="_parameter!=null and _parameter!=''">
+			and id=#{_parameter}
+		</if>	     
+	</select>
+	<select id="manage.order.selectDetailByOrderId" parameterType="java.lang.String" resultType="com.fang.fangshop.bean.OrderDetail">
+		SELECT id, orderID, productID, price, number, 
+		       productName, fee, total0, isComment, lowStocks, 
+		       score, specInfo, giftID
+		FROM t_orderdetail
+		WHERE 1=1 
+		<if test="_parameter!=null and _parameter!=''">
+		    AND orderid=#{_parameter}
+		</if>
+	</select>
+	<select id="manage.order.selectLogByOrderId" parameterType="java.lang.String" resultType="com.fang.fangshop.bean.OrderLog">
+		SELECT id, orderid, account, 
+		       createdate, content, accountType
+		FROM t_orderlog
+		WHERE 1=1 
+		<if test="_parameter!=null and _parameter!=''">
+		    AND orderid=#{_parameter}
+		</if>		
+	</select>
+	<select id="manage.order.selectPayByOrderId" parameterType="java.lang.String" resultType="com.fang.fangshop.bean.OrderPay">
+		SELECT id, orderid, paystatus, 
+			payamount, createtime, 
+			paymethod, confirmdate, confirmuser, 
+			remark, tradeNo
+		FROM t_orderpay
+		WHERE 1=1 
+		<if test="_parameter!=null and _parameter!=''">
+		    AND orderid=#{_parameter}
+		</if>
+	</select>
+	<select id="manage.order.selectShipByOrderId" parameterType="java.lang.String" resultType="com.fang.fangshop.bean.OrderShip">
+		SELECT id, orderid, shipname,
+			shipaddress, provinceCode, 
+			province, cityCode, city, areaCode, 
+			AREA, phone, tel, zip, sex, remark
+		FROM t_ordership
+		WHERE 1=1 
+		<if test="_parameter!=null and _parameter!=''">
+		    AND orderid=#{_parameter}
+		</if>
+	</select>
+	<update id="manage.order.update" parameterType="com.fang.fangshop.bean.Order" >
+	    update t_order
+	    set account = #{account,jdbcType=VARCHAR},
+	      payType = #{paytype,jdbcType=INTEGER},
+	      carry = #{carry,jdbcType=INTEGER},
+	      rebate = #{rebate,jdbcType=DECIMAL},
+	      createdate = #{createdate,jdbcType=TIMESTAMP},
+	      status = #{status,jdbcType=VARCHAR},
+	      refundStatus = #{refundstatus,jdbcType=VARCHAR},
+	      amount = #{amount,jdbcType=DECIMAL},
+	      fee = #{fee,jdbcType=DECIMAL},
+	      ptotal = #{ptotal,jdbcType=DECIMAL},
+	      quantity = #{quantity,jdbcType=INTEGER},
+	      paystatus = #{paystatus,jdbcType=VARCHAR},
+	      updateAmount = #{updateamount,jdbcType=VARCHAR},
+	      expressCode = #{expresscode,jdbcType=VARCHAR},
+	      expressName = #{expressname,jdbcType=VARCHAR},
+	      otherRequirement = #{otherrequirement,jdbcType=VARCHAR},
+	      remark = #{remark,jdbcType=VARCHAR},
+	      expressNo = #{expressno,jdbcType=VARCHAR},
+	      expressCompanyName = #{expresscompanyname,jdbcType=VARCHAR},
+	      lowStocks = #{lowstocks,jdbcType=VARCHAR},
+	      confirmSendProductRemark = #{confirmsendproductremark,jdbcType=VARCHAR},
+	      closedComment = #{closedcomment,jdbcType=VARCHAR},
+	      score = #{score,jdbcType=INTEGER}
+	    where id = #{id,jdbcType=INTEGER}
+  </update>
+    <update id="manage.order.updateById" parameterType="com.fang.fangshop.bean.Order">
+  		update t_order
+  		set id=#{id}
+  		<if test="account != null and account!=''">
+  		    ,account=#{account}
+  		</if>
+  		<if test="paytype != null and paytype !=''">
+  		    ,paytype=#{paytype}
+  		</if>
+  		<if test="carry != null and carry!=''">
+  		    ,carry=#{carry}
+  		</if>  
+  		<if test="rebate != null and rebate != ''">
+  		    ,rebate=#{rebate}
+  		</if>
+  		<if test="status != null and status!=''">
+  		    ,status=#{status}
+  		</if>
+  		<if test="refundstatus != null and refundstatus!=''">
+  		    ,refundstatus=#{refundstatus}
+  		</if> 
+  		<if test="amount != null and amount !=''">
+  		    ,amount=#{amount}
+  		</if>
+  		<if test="fee != null and fee!=''">
+  		    ,fee=#{fee}
+  		</if>
+  		<if test="ptotal != null and ptotal!=''">
+  		    ,ptotal=#{ptotal}
+  		</if> 
+  		<if test="quantity != null and quantity!=''">
+  		    ,quantity=#{quantity}
+  		</if>
+  		<if test="paystatus != null and paystatus!=''">
+  		    ,paystatus=#{paystatus}
+  		</if>
+  		<if test="updateamount != null and updateamount!=''">
+  		    ,updateamount=#{updateamount}
+  		</if>  
+  		<if test="expresscode != null and expresscode!=''">
+  		    ,expresscode=#{expresscode}
+  		</if>
+  		<if test="expressname != null and expressname!=''">
+  		    ,expressname=#{expressname}
+  		</if>
+  		<if test="otherrequirement != null and otherrequirement!=''">
+  		    ,otherrequirement=#{otherrequirement}
+  		</if> 
+  		<if test="remark != null and remark!=''">
+  		    ,remark=#{remark}
+  		</if>
+  		<if test="expressno != null and expressno!=''">
+  		    ,expressno=#{expressno}
+  		</if>
+  		<if test="expresscompanyname != null and expresscompanyname!=''">
+  		   ,expresscompanyname=#{expresscompanyname}
+  		</if>   		
+  		<if test="lowstocks != null and lowstocks!=''">
+  		    ,lowstocks=#{lowstocks}
+  		</if>
+  		<if test="confirmsendproductremark != null and confirmsendproductremark!=''">
+  		    ,confirmsendproductremark=#{confirmsendproductremark}
+  		</if>
+  		<if test="closedcomment != null and closedcomment!=''">
+  		    ,closedComment=#{closedComment}
+  		</if>  
+  		<if test="score != null and score!=''">
+  		    ,score=#{score}
+  		</if>
+  		where 1=1 and id=#{id}	
+  </update>
+	<select id="manage.order.selectHomeOrders" resultMap="OrdersMap">
+		SELECT COUNT(CASE WHEN paystatus='n' THEN id END) AS NopayCount,
+		       COUNT(CASE WHEN paystatus='y' AND STATUS='init' THEN id END) AS PayNoAuditCount,
+		       COUNT(CASE WHEN STATUS='cancel' THEN id END) AS PayCancelCount,
+		       COUNT(CASE WHEN STATUS='pass' THEN id END) AS PassCount,
+		       COUNT(CASE WHEN refundStatus='WAIT_SELLER_AGREE' THEN id END) AS SellerAgreeCount,
+		       COUNT(CASE WHEN refundStatus='WAIT_SELLER_CONFIRM_GOODS' THEN id END) AS SellerConfirmGoodsCount,
+		       COUNT(CASE WHEN refundStatus='SELLER_REFUSE_BUYER' THEN id END) AS SellerRefuseCount,
+		       COUNT(CASE WHEN refundStatus='WAIT_BUYER_RETURN_GOODS' THEN id END) AS BuyerRefuseCount
+		FROM t_order 
+	</select>
+	 <resultMap id="OrderSalesMap" type="com.fang.fangshop.bean.ReportInfo" >
+	    <result column="createdate" property="createdate" jdbcType="VARCHAR" />
+	    <result column="sumAmount" property="sumAmount" jdbcType="DOUBLE" />
+	    <result column="productID" property="productID" jdbcType="INTEGER" />
+	    <result column="productName" property="productName" jdbcType="VARCHAR" />
+	    <result column="productSellCount" property="productSellCount" jdbcType="INTEGER" />
+    </resultMap>
+	<select id="manage.order.selectOrderSales" parameterType="com.fang.fangshop.bean.ReportInfo" resultMap="OrderSalesMap">
+	    SELECT date_format(t.createdate,'%Y-%m') createdate,sum(t.amount) sumAmount 
+	    FROM t_order t
+		where t.paystatus='y' and t.createdate &gt;= #{startDate} and t.createdate &lt;= #{endDate}  
+		group by date_format(t.createdate,'%Y-%m')
+	</select>
+	<select id="manage.order.selectProductSelleCount" parameterType="com.fang.fangshop.bean.ReportInfo" resultMap="OrderSalesMap">
+		SELECT od.productID,od.productName,SUM(od.number) productSellCount 
+		FROM t_order o,t_orderdetail od 
+		WHERE 1=1 AND o.id=od.orderid AND o.paystatus='y'  AND o.createdate &gt;= #{startDate}  and  o.createdate &lt;= #{endDate}  
+		GROUP BY od.productID 
+		ORDER BY SUM(od.number) DESC 
+		LIMIT 15
+	</select>
+</mapper>

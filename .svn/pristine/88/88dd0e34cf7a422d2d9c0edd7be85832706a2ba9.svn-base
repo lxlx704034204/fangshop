@@ -1,0 +1,68 @@
+package com.fang.fangshop.impl;
+
+import java.util.List;
+
+import javax.annotation.Resource;
+
+import com.fang.fangshop.been.SystemSettingModel;
+import com.fang.fangshop.core.been.SystemSetting;
+import com.fang.fangshop.core.common.PageModel;
+import org.springframework.stereotype.Repository;
+import com.fang.fangshop.core.dao.BaseDao;
+import com.fang.fangshop.dao.ISystemSettingDao;
+
+@Repository("systemSettingDao")
+public class SystemSettingDaoImpl implements ISystemSettingDao {
+	@Resource
+	private BaseDao baseDao;
+	public void setBaseDao(BaseDao baseDao) {
+		this.baseDao = baseDao;
+	}
+	@Override
+	public int insert(SystemSettingModel e) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int delete(SystemSettingModel e) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int update(SystemSettingModel e) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public SystemSettingModel selectOne(SystemSettingModel e) {
+		return baseDao.selectOne("manage.systemSetting.selectOne");
+	}
+
+	@Override
+	public PageModel selectPageList(SystemSettingModel e) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<SystemSettingModel> selectList(SystemSettingModel e) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int deleteById(int id) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public SystemSettingModel selectById(String id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

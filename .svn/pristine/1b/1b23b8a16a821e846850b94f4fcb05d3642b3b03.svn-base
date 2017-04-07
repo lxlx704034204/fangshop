@@ -1,0 +1,62 @@
+package com.fang.fangshop.impl;
+
+import java.util.List;
+
+import javax.annotation.Resource;
+
+import com.fang.fangshop.core.been.IndexImg;
+import com.fang.fangshop.core.common.PageModel;
+import org.springframework.stereotype.Repository;
+import com.fang.fangshop.core.dao.BaseDao;
+import com.fang.fangshop.dao.IIdexImgDao;
+
+@Repository("indexImgDao")
+public class IndexImgDaoImpl implements IIdexImgDao {
+	@Resource
+	private BaseDao baseDao;
+	public void setBaseDao(BaseDao baseDao) {
+		this.baseDao = baseDao;
+	}
+	@Override
+	public int insert(IndexImg e) {
+		return baseDao.insert("manage.indeximg.insert", e);
+	}
+
+	@Override
+	public int delete(IndexImg e) {
+		return baseDao.delete("manage.indeximg.deleteById", e.getId());
+	}
+
+	@Override
+	public int update(IndexImg e) {
+		return baseDao.update("manage.indeximg.updateById", e);
+	}
+
+	@Override
+	public IndexImg selectOne(IndexImg e) {
+		return baseDao.selectOne("manage.indeximg.selectById", e);
+	}
+
+	@Override
+	public PageModel selectPageList(IndexImg e) {
+		return baseDao.selectPageList("manage.indeximg.selectPageList",
+				"manage.indeximg.selectPageCount", e);
+	}
+
+	@Override
+	public List<IndexImg> selectList(IndexImg e) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int deleteById(int id) {
+		return baseDao.delete("manage.indeximg.deleteById", id);
+	}
+
+	@Override
+	public IndexImg selectById(String id) {
+		return baseDao.selectOne("manage.indeximg.selectById", Integer.parseInt(id));
+	}
+
+}

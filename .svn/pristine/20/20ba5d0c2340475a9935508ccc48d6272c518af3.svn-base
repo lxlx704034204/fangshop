@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC
+"-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="attribute">
+	<resultMap type="com.fang.fangshop.core.bean.Attribute" id="attributeMap">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="catalogID" property="catalogid" jdbcType="INTEGER" />
+		<result column="pid" property="pid" jdbcType="INTEGER" />
+		<result column="order1" property="order" jdbcType="INTEGER" />
+	</resultMap>
+
+	<insert id="attribute.insert" parameterType="com.fang.fangshop.core.bean.Attribute">
+		insert into t_attribute ( name, catalogID,
+		pid, order1)
+		values ( #{name,jdbcType=VARCHAR}, #{catalogid,jdbcType=INTEGER},
+		#{pid,jdbcType=INTEGER}, #{order1,jdbcType=INTEGER})
+	</insert>
+</mapper> 
+
+

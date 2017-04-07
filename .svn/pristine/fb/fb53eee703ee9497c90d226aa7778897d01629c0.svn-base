@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="manage.news">
+	<resultMap id="BaseResultMap" type="com.fang.fangshop.bean.News">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="type" property="type" jdbcType="VARCHAR" />
+		<result column="title" property="title" jdbcType="VARCHAR" />
+		<result column="title2" property="title2" jdbcType="VARCHAR" />
+		<result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
+		<result column="updatetime" property="updatetime" jdbcType="TIMESTAMP" />
+		<result column="readerCount" property="readercount" jdbcType="INTEGER" />
+		<result column="status" property="status" jdbcType="VARCHAR" />
+		<result column="catalogID" property="catalogid" jdbcType="VARCHAR" />
+		<result column="lableID" property="lableid" jdbcType="VARCHAR" />
+		<result column="createAccount" property="createaccount"
+			jdbcType="VARCHAR" />
+		<result column="order1" property="order1" jdbcType="INTEGER" />
+		<result column="code" property="code" jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap id="ResultMapWithBLOBs" type="com.fang.fangshop.bean.News"
+		extends="BaseResultMap">
+		<result column="content" property="content" jdbcType="LONGVARCHAR" />
+	</resultMap>
+	<select id="manage.news.selectPageList" parameterType="com.fang.fangshop.bean.News"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from t_news
+		where 1=1
+		<if test="id!=null and id!=''">
+			and id=#{id}
+		</if>
+		<if test="type!=null and type!=''">
+			and type=#{type}
+		</if>
+		<if test="title!=null and title!=''">
+			and title like '%${title}%'
+		</if>
+		<if test="status!=null and status!=''">
+			and status=#{status}
+		</if>
+		order by updatetime desc
+		limit #{offset},#{pageSize}
+	</select>
+	<select id="manage.news.selectPageCount" parameterType="com.fang.fangshop.bean.News"
+		resultType="Integer">
+		select
+		count(1) as total
+		from t_news
+		where 1=1
+		<if test="id!=null and id!=''">
+			and id=#{id}
+		</if>
+		<if test="type!=null and type!=''">
+			and type=#{type}
+		</if>
+		<if test="title!=null and title!=''">
+			and title like '%${title}%'
+		</if>
+		<if test="status!=null and status!=''">
+			and status=#{status}
+		</if>
+	</select>
+	<sql id="Base_Column_List">
+		id, type, title, title2, createtime, updatetime, readerCount, status,
+		catalogID,
+		lableID, createAccount, order1, code
+	</sql>
+	<sql id="Blob_Column_List">
+		content
+	</sql>
+	<select id="manage.news.selectById" resultMap="ResultMapWithBLOBs"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from t_news
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+	<delete id="manage.news.deleteById" parameterType="java.lang.Integer">
+		delete from t_news
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+	<insert id="manage.news.insert" parameterType="com.fang.fangshop.bean.News">
+		insert into t_news (id, type, title,
+		title2, createtime, updatetime,
+		readerCount, status, catalogID,
+		lableID, createAccount, order1,
+		code, content)
+		values (#{id,jdbcType=INTEGER}, #{type,jdbcType=VARCHAR},
+		#{title,jdbcType=VARCHAR},
+		#{title2,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}, #{updatetime,jdbcType=TIMESTAMP},
+		#{readercount,jdbcType=INTEGER}, #{status,jdbcType=VARCHAR},
+		#{catalogid,jdbcType=VARCHAR},
+		#{lableid,jdbcType=VARCHAR}, #{createaccount,jdbcType=VARCHAR}, #{order1,jdbcType=INTEGER},
+		#{code,jdbcType=VARCHAR}, #{content,jdbcType=LONGVARCHAR})
+	</insert>
+	<insert id="manage.news.insertByField" parameterType="com.fang.fangshop.bean.News">
+		insert into t_news
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="type != null">
+				type,
+			</if>
+			<if test="title != null">
+				title,
+			</if>
+			<if test="title2 != null">
+				title2,
+			</if>
+			<if test="createtime != null">
+				createtime,
+			</if>
+			<if test="updatetime != null">
+				updatetime,
+			</if>
+			<if test="readercount != null">
+				readerCount,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+			<if test="catalogid != null">
+				catalogID,
+			</if>
+			<if test="lableid != null">
+				lableID,
+			</if>
+			<if test="createaccount != null">
+				createAccount,
+			</if>
+			<if test="order1 != null">
+				order1,
+			</if>
+			<if test="code != null">
+				code,
+			</if>
+			<if test="content != null">
+				content,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="type != null">
+				#{type,jdbcType=VARCHAR},
+			</if>
+			<if test="title != null">
+				#{title,jdbcType=VARCHAR},
+			</if>
+			<if test="title2 != null">
+				#{title2,jdbcType=VARCHAR},
+			</if>
+			<if test="createtime != null">
+				#{createtime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updatetime != null">
+				#{updatetime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="readercount != null">
+				#{readercount,jdbcType=INTEGER},
+			</if>
+			<if test="status != null">
+				#{status,jdbcType=VARCHAR},
+			</if>
+			<if test="catalogid != null">
+				#{catalogid,jdbcType=VARCHAR},
+			</if>
+			<if test="lableid != null">
+				#{lableid,jdbcType=VARCHAR},
+			</if>
+			<if test="createaccount != null">
+				#{createaccount,jdbcType=VARCHAR},
+			</if>
+			<if test="order1 != null">
+				#{order1,jdbcType=INTEGER},
+			</if>
+			<if test="code != null">
+				#{code,jdbcType=VARCHAR},
+			</if>
+			<if test="content != null">
+				#{content,jdbcType=LONGVARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="manage.news.updateByIdWithBLOBs" parameterType="com.fang.fangshop.bean.News">
+		update t_news
+		set type = #{type,jdbcType=VARCHAR},
+		title = #{title,jdbcType=VARCHAR},
+		title2 = #{title2,jdbcType=VARCHAR},
+		createtime = #{createtime,jdbcType=TIMESTAMP},
+		updatetime = #{updatetime,jdbcType=TIMESTAMP},
+		readerCount = #{readercount,jdbcType=INTEGER},
+		status = #{status,jdbcType=VARCHAR},
+		catalogID = #{catalogid,jdbcType=VARCHAR},
+		lableID = #{lableid,jdbcType=VARCHAR},
+		createAccount = #{createaccount,jdbcType=VARCHAR},
+		order1 = #{order1,jdbcType=INTEGER},
+		code = #{code,jdbcType=VARCHAR},
+		content = #{content,jdbcType=LONGVARCHAR}
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	<update id="manage.news.updateById" parameterType="com.fang.fangshop.bean.News">
+		update t_news
+		set type = #{type,jdbcType=VARCHAR},
+		title = #{title,jdbcType=VARCHAR},
+		title2 = #{title2,jdbcType=VARCHAR},
+		updatetime = #{updatetime,jdbcType=TIMESTAMP},
+		content = #{content,jdbcType=LONGVARCHAR},
+		readerCount = #{readercount,jdbcType=INTEGER},
+		status = #{status,jdbcType=VARCHAR},
+		catalogID = #{catalogid,jdbcType=VARCHAR},
+		lableID = #{lableid,jdbcType=VARCHAR},
+		order1 = #{order1,jdbcType=INTEGER},
+		code = #{code,jdbcType=VARCHAR}
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+</mapper>

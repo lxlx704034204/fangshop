@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="manage.email" >
+  <resultMap id="BaseResultMap" type="com.fang.fangshop.core.been.Email" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="sign" property="sign" jdbcType="VARCHAR" />
+    <result column="account" property="account" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="VARCHAR" />
+    <result column="url" property="url" jdbcType="VARCHAR" />
+    <result column="createdate" property="createdate" jdbcType="TIMESTAMP" />
+    <result column="starttime" property="starttime" jdbcType="VARCHAR" />
+    <result column="endtime" property="endtime" jdbcType="VARCHAR" />
+    <result column="newEmail" property="newemail" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="sendStatus" property="sendstatus" jdbcType="CHAR" />
+    <result column="notifyTemplateName" property="notifyTemplateName" jdbcType="VARCHAR"/>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, sign, account, type, url, createdate, starttime, endtime, newEmail, status, sendStatus
+  </sql>
+   <select id="manage.email.selectPageList" parameterType="com.fang.fangshop.core.been.Email"
+	resultMap="BaseResultMap">
+	select
+	<include refid="Base_Column_List" />,
+	(select n.name from t_notifyTemplate n where n.code=t.type) notifyTemplateName
+	from t_email t
+	where 1=1
+	<if test="account!=null and account!=''">
+		and account like '%${account}%'
+	</if>
+	<if test="sendstatus!=null and sendstatus!=''">
+		and sendstatus=#{sendstatus}
+	</if>
+	order by id desc
+	limit #{offset},#{pageSize}
+  </select>
+  <select id="manage.email.selectPageCount" parameterType="com.fang.fangshop.core.been.Email"
+	resultType="Integer">
+	select
+	count(1) as total
+	from t_email
+	where 1=1
+	<if test="account!=null and account!=''">
+		and account like '%${account}%'
+	</if>
+	<if test="sendstatus!=null and sendstatus!=''">
+		and sendstatus=#{sendstatus}
+	</if>
+  </select>  
+  <select id="manage.email.selectById" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_email t
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteById" parameterType="java.lang.Integer" >
+    delete from t_email
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="manage.email.insert" parameterType="com.fang.fangshop.core.been.Email" >
+    insert into t_email (id, sign, account, 
+      type, url, createdate, 
+      starttime, endtime, newEmail, 
+      status, sendStatus)
+    values (#{id,jdbcType=INTEGER}, #{sign,jdbcType=VARCHAR}, #{account,jdbcType=VARCHAR}, 
+      #{type,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR}, #{createdate,jdbcType=TIMESTAMP}, 
+      #{starttime,jdbcType=VARCHAR}, #{endtime,jdbcType=VARCHAR}, #{newemail,jdbcType=VARCHAR}, 
+      #{status,jdbcType=VARCHAR}, #{sendstatus,jdbcType=CHAR})
+  </insert>
+  <insert id="manage.email.insertSelective" parameterType="com.fang.fangshop.core.been.Email" >
+    insert into t_email
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="sign != null" >
+        sign,
+      </if>
+      <if test="account != null" >
+        account,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="url != null" >
+        url,
+      </if>
+      <if test="createdate != null" >
+        createdate,
+      </if>
+      <if test="starttime != null" >
+        starttime,
+      </if>
+      <if test="endtime != null" >
+        endtime,
+      </if>
+      <if test="newemail != null" >
+        newEmail,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="sendstatus != null" >
+        sendStatus,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="sign != null" >
+        #{sign,jdbcType=VARCHAR},
+      </if>
+      <if test="account != null" >
+        #{account,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null" >
+        #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="createdate != null" >
+        #{createdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="starttime != null" >
+        #{starttime,jdbcType=VARCHAR},
+      </if>
+      <if test="endtime != null" >
+        #{endtime,jdbcType=VARCHAR},
+      </if>
+      <if test="newemail != null" >
+        #{newemail,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="sendstatus != null" >
+        #{sendstatus,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="manage.email.updateById" parameterType="com.fang.fangshop.core.been.Email" >
+    update t_email
+    set sign = #{sign,jdbcType=VARCHAR},
+      account = #{account,jdbcType=VARCHAR},
+      type = #{type,jdbcType=VARCHAR},
+      url = #{url,jdbcType=VARCHAR},
+      createdate = #{createdate,jdbcType=TIMESTAMP},
+      starttime = #{starttime,jdbcType=VARCHAR},
+      endtime = #{endtime,jdbcType=VARCHAR},
+      newEmail = #{newemail,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR},
+      sendStatus = #{sendstatus,jdbcType=CHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

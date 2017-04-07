@@ -1,0 +1,15 @@
+package com.fang.fangshop.been;
+
+import com.fang.fangshop.core.been.OrderPay;
+
+import java.io.Serializable;
+
+public class OrderPayModel extends OrderPay implements Serializable
+{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+}

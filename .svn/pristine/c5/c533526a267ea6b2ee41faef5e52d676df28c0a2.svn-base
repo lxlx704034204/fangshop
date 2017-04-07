@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC 
+"-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="manage.orderPay">
+  <insert id="manage.orderPay.insert" parameterType="com.fang.fangshop.bean.OrderPay" useGeneratedKeys="true" keyProperty="id">
+    insert into t_orderpay (id, orderid, paystatus, 
+      payamount, createtime, paymethod, 
+      confirmdate, confirmuser, remark,tradeNo)
+    values (#{id,jdbcType=INTEGER}, #{orderid,jdbcType=VARCHAR}, #{paystatus,jdbcType=VARCHAR}, 
+      #{payamount,jdbcType=DECIMAL}, #{createtime,jdbcType=TIMESTAMP}, #{paymethod,jdbcType=VARCHAR}, 
+      #{confirmdate,jdbcType=TIMESTAMP}, #{confirmuser,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
+      #{tradeno,jdbcType=VARCHAR})
+  </insert>
+</mapper>

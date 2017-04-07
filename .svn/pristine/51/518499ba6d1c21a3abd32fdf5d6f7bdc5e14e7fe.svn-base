@@ -1,0 +1,18 @@
+package com.fang.fangshop.services.impl;
+
+import javax.annotation.Resource;
+
+import com.fang.fangshop.been.SystemSettingModel;
+import com.fang.fangshop.core.service.ServicesManager;
+import org.springframework.stereotype.Service;
+import com.fang.fangshop.dao.ISystemSettingDao;
+import com.fang.fangshop.services.ISystemSettingService;
+
+@Service("systemSettingService")
+public class SystemSettingServiceImpl extends ServicesManager<SystemSettingModel, ISystemSettingDao> implements ISystemSettingService {
+	@Resource(name="systemSettingDao")
+	@Override
+	protected void setDao(ISystemSettingDao dao) {
+		this.dao=dao;
+	}
+}

@@ -1,0 +1,269 @@
+package com.fang.fangshop.web.controller;
+
+import java.util.Collection;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import com.fang.fangshop.core.common.*;
+import com.fang.fangshop.core.system.been.MenuItem;
+import com.fang.fangshop.core.system.been.User;
+import com.fang.fangshop.services.IRoleService;
+import com.fang.fangshop.web.framework.BaseController;
+import com.fang.fangshop.web.framework.JsonResult;
+import org.apache.commons.lang.StringUtils;
+import org.omg.PortableInterceptor.USER_EXCEPTION;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.*;
+import com.fang.fangshop.services.IMenuService;
+import com.fang.fangshop.services.IUserService;
+
+@Controller
+@RequestMapping("/manage/user")
+public class UserController extends BaseController {
+
+	private static final String page_input = "manage/system/login";
+	private static final String page_home = "manage/system/home";
+	private static final String page_toList = "manage/system/user/userList";
+	private static final String page_toAdd = "manage/system/user/addUser";
+	private static final String page_toEdit = "manage/system/user/editUser";
+	private static final String page_toChangePwd = "manage/system/user/toChangePwd";
+	private static final String page_changePwd_result = "manage/system/user/changePwd";
+	private static final String page_show = "manage/system/user/show";
+
+	@Autowired
+	private IMenuService menuService;
+	@Autowired
+	private IUserService userService;
+	@Autowired
+	private IRoleService roleService;
+
+	/**
+	 * GET 请求登录   从地址栏直接登录
+	 *
+	 * @param e
+	 * @param session
+	 * @return
+	 */
+	@RequestMapping("/login")
+	public String login(@ModelAttribute("e") User e, HttpSession session) {
+		return page_input;
+	}
+
+	/**
+	 * 表单提交登录
+	 *
+	 * @param session
+	 * @param e
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/login", method = RequestMethod.POST)
+	public String login(HttpSession session, @ModelAttribute("e") User e, Model model) throws Exception {
+		//获取输入的用户名和密码
+		String userName = e.getUsername();
+		String password = e.getPassword();
+		if (e != null && !userName.isEmpty() && !password.isEmpty()) {
+			//将 密码 进行 MD5 加密
+			e.setPassword(MD5.convertToMd5(e.getPassword()));
+			User user = userService.selectOne(e);
+			if (user != null) {
+				Collection<MenuItem> menuItems = loadMenuData(user);
+				//将 菜单信息 放入  session 中
+				session.setAttribute("userMenus", menuItems);
+				session.setAttribute(ManageContainer.manage_session_user_info, user);
+				//	session.setMaxInactiveInterval(3600*2);
+				return "redirect:/manage/home/index";
+			} else {
+				model.addAttribute("errorMsg", "输入的用户名和密码有误！");
+			}
+		} else if (userName.isEmpty() || password.isEmpty()) {
+			model.addAttribute("errorMsg", "请输入用户名和密码！");
+		}
+		return page_input;
+	}
+
+	/**
+	 * 分页获取用户列表
+	 *
+	 * @param e
+	 * @return
+	 */
+	@RequestMapping("/search")
+	@ResponseBody
+	public JsonResult search(@ModelAttribute("e") User e) {
+		try {
+			PageModel pageModel = userService.selectPageList(e);
+			return new JsonResult("success", pageModel);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			return new JsonResult("fail", ex.getMessage());
+		}
+	}
+
+	/**
+	 * 注销登录
+	 *
+	 * @param session
+	 * @return
+	 */
+	@RequestMapping("/logout")
+	public String loginOut(HttpSession session, @ModelAttribute("e") User e) {
+		e = null;
+		return page_input;
+	}
+
+	/**
+	 * 加载菜单
+	 *
+	 * @param user
+	 * @return
+	 */
+	private Collection<MenuItem> loadMenuData(User user) {
+		Collection<MenuItem> userMenus = menuService.getMenus(user,1);
+		return userMenus;
+	}
+
+	/**
+	 * 列表
+	 *
+	 * @return
+	 */
+	@RequestMapping("/selectList")
+	public String selectList() {
+		return page_toList;
+	}
+
+	/**
+	 * 添加
+	 *
+	 * @param modelMap
+	 * @return
+	 */
+	@RequestMapping("/toAdd")
+	public String toAdd(ModelMap modelMap) {
+		modelMap.addAttribute("roles", roleService.getAllRoles());
+		return page_toAdd;
+	}
+
+	/**
+	 * 编辑
+	 *
+	 * @param modelMap
+	 * @return
+	 */
+	@RequestMapping("/toEdit")
+	public String toEdit(@ModelAttribute("user") User user, ModelMap modelMap) {
+		modelMap.addAttribute("roles", roleService.getAllRoles());
+		User user1 = userService.selectOne(user);
+		modelMap.addAttribute("user", user1);
+		return page_toEdit;
+	}
+
+	/**
+	 * 添加函数
+	 *
+	 * @param user
+	 * @return
+	 */
+	@RequestMapping("/insert")
+	@ResponseBody
+	public JsonResult insert(@ModelAttribute("user") User user) {
+		try {
+			if (StringUtils.isBlank(user.getUsername())) {
+				return new JsonResult("账号不能为空！");
+			}
+			if (StringUtils.isBlank(user.getNickname())) {
+				return new JsonResult("昵称不能为空！");
+			}
+			if (StringUtils.isBlank(user.getEmail())) {
+				return new JsonResult("邮箱不能为空！");
+			}
+			if (StringUtils.isBlank(user.getPassword())) {
+				return new JsonResult("密码不能为空！");
+			}
+			//用户验证
+			String message = ValidateUser(user);
+			if (!StringUtils.isBlank(message)) {
+				return new JsonResult(message);
+			}
+			User curuser = (User) RequestHolder.getSession().getAttribute(ManageContainer.manage_session_user_info);
+			user.setCreateaccount(curuser.getUsername());
+			user.setPassword(MD5.convertToMd5(user.getPassword()));
+			userService.insert(user);
+			return new JsonResult("success");
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return new JsonResult("fail");
+	}
+
+	/**
+	 * 编辑函数
+	 *
+	 * @param user
+	 * @return
+	 */
+	@RequestMapping("/update")
+	@ResponseBody
+	public JsonResult update(@ModelAttribute("user") User user) {
+		try {
+			if (StringUtils.isBlank(user.getUsername())) {
+				return new JsonResult("账号不能为空！");
+			}
+			if (StringUtils.isBlank(user.getNickname())) {
+				return new JsonResult("昵称不能为空！");
+			}
+			if (StringUtils.isBlank(user.getEmail())) {
+				return new JsonResult("邮箱不能为空！");
+			}
+
+			User curuser = (User) session.getAttribute(ManageContainer.manage_session_user_info);
+			user.setUpdateaccount(curuser.getUsername());
+			if (StringUtils.isBlank(user.getPassword())) {
+				user.setPassword(MD5.convertToMd5(user.getPassword()));
+			}
+			userService.update(user);
+			return new JsonResult("success");
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return new JsonResult("fail");
+	}
+
+	/**
+	 * 删除函数
+	 *
+	 * @param httpServletRequest
+	 * @return
+	 */
+	@RequestMapping("/delete")
+	@ResponseBody
+	public JsonResult delete(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
+		try {
+			Integer id = Integer.parseInt(httpServletRequest.getParameter("id"));
+			userService.updateById(id);
+			return new JsonResult("success");
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return new JsonResult("fail");
+	}
+
+	/**
+	 * 验证用户输入信息
+	 *
+	 * @return
+	 */
+	public String ValidateUser(User user) {
+		int count = userService.getByField(user);
+		if (count >= 1) {
+			return "账号或用户名存在！";
+		}
+		return "";
+	}
+}

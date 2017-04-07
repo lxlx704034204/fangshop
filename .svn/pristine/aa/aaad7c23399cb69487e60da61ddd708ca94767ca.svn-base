@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="manage.oss">
+	<resultMap id="BaseResultMap" type="com.fang.fangshop.core.been.Oss">
+		<id column="id" property="id" jdbcType="INTEGER" />
+	    <result column="name" property="name" jdbcType="VARCHAR" />
+	    <result column="code" property="code" jdbcType="VARCHAR" />
+	    <result column="status" property="status" jdbcType="VARCHAR" />
+	    <result column="ossJsonInfo" property="ossjsoninfo" jdbcType="VARCHAR" />
+	</resultMap>
+	<select id="manage.oss.selectPageList" parameterType="com.fang.fangshop.core.been.Oss"
+		resultMap="BaseResultMap">
+		select id, name, code, status, ossJsonInfo
+		from t_oss
+		order by Id desc
+		limit #{offset},#{pageSize}
+	</select>
+	<select id="manage.oss.selectPageCount" parameterType="com.fang.fangshop.core.been.Oss"
+		resultType="Integer">
+		select count(1) as total
+		from t_oss
+	</select>
+	<select id="manage.oss.selectById" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select id, name, code, status, ossJsonInfo
+		from t_oss
+		where id = #{_parameter,jdbcType=INTEGER}
+	</select>
+	<delete id="manage.oss.deleteById" parameterType="java.lang.Integer">
+		delete from t_oss
+		where id = #{_parameter,jdbcType=INTEGER}
+	</delete>
+	<insert id="manage.oss.insert" parameterType="com.fang.fangshop.core.been.Oss">
+		insert into t_oss (name, code,status, ossJsonInfo)
+    	values (#{name,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, 
+      		#{status,jdbcType=VARCHAR}, #{ossjsoninfo,jdbcType=VARCHAR})
+	</insert>
+	<insert id="manage.oss.insertSelective" parameterType="com.fang.fangshop.core.been.Oss">
+		insert into t_oss
+	    <trim prefix="(" suffix=")" suffixOverrides="," >
+	      <if test="id != null" >
+	        id,
+	      </if>
+	      <if test="name != null" >
+	        name,
+	      </if>
+	      <if test="code != null" >
+	        code,
+	      </if>
+	      <if test="status != null" >
+	        status,
+	      </if>
+	      <if test="ossjsoninfo != null" >
+	        ossJsonInfo,
+	      </if>
+	    </trim>
+	    <trim prefix="values (" suffix=")" suffixOverrides="," >
+	      <if test="id != null" >
+	        #{id,jdbcType=INTEGER},
+	      </if>
+	      <if test="name != null" >
+	        #{name,jdbcType=VARCHAR},
+	      </if>
+	      <if test="code != null" >
+	        #{code,jdbcType=VARCHAR},
+	      </if>
+	      <if test="status != null" >
+	        #{status,jdbcType=VARCHAR},
+	      </if>
+	      <if test="ossjsoninfo != null" >
+	        #{ossjsoninfo,jdbcType=VARCHAR},
+	      </if>
+	    </trim>
+	</insert>
+	<update id="manage.oss.updateById" parameterType="com.fang.fangshop.core.been.Oss">
+		update t_oss
+	    set name = #{name,jdbcType=VARCHAR},
+	       code = #{code,jdbcType=VARCHAR},
+	       status = #{status,jdbcType=VARCHAR},
+	       ossJsonInfo = #{ossjsoninfo,jdbcType=VARCHAR}
+	    where id = #{id,jdbcType=INTEGER}
+	</update>
+</mapper>

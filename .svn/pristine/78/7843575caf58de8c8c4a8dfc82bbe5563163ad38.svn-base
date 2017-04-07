@@ -1,0 +1,28 @@
+package com.fang.fangshop.services.impl;
+
+import java.util.List;
+
+import javax.annotation.Resource;
+
+import com.fang.fangshop.been.AreaModel;
+import com.fang.fangshop.core.service.ServicesManager;
+import org.springframework.stereotype.Service;
+import com.fang.fangshop.dao.IAreaDao;
+import com.fang.fangshop.services.IAreaService;
+
+@Service("areaService")
+public class AreaServiceImpl extends ServicesManager<AreaModel, IAreaDao> implements IAreaService {
+    @Resource(name="areaDao")
+	@Override
+	protected void setDao(IAreaDao dao) {
+    	this.dao=dao;
+	}
+	@Override
+	public List<AreaModel> getListAll() {
+		return dao.getListAll();
+	}
+	@Override
+	public List<AreaModel> getAreaByCode(String code) {
+		return dao.getAreaByCode(code);
+	}
+}

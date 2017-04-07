@@ -1,0 +1,454 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="account">
+	<resultMap id="AccountMap" type="com.fang.fangshop.core.bean.Account">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="account" property="account" jdbcType="VARCHAR" />
+		<result column="nickname" property="nickname" jdbcType="VARCHAR" />
+		<result column="password" property="password" jdbcType="VARCHAR" />
+		<result column="city" property="city" jdbcType="VARCHAR" />
+		<result column="address" property="address" jdbcType="VARCHAR" />
+		<result column="postcode" property="postcode" jdbcType="VARCHAR" />
+		<result column="cardType" property="cardtype" jdbcType="VARCHAR" />
+		<result column="cardNO" property="cardno" jdbcType="VARCHAR" />
+		<result column="grade" property="grade" jdbcType="INTEGER" />
+		<result column="amount" property="amount" jdbcType="VARCHAR" />
+		<result column="tel" property="tel" jdbcType="VARCHAR" />
+		<result column="email" property="email" jdbcType="VARCHAR" />
+		<result column="emailIsActive" property="emailisactive"
+			jdbcType="VARCHAR" />
+		<result column="freeze" property="freeze" jdbcType="VARCHAR" />
+		<result column="lastLoginTime" property="lastlogintime"
+			jdbcType="TIMESTAMP" />
+		<result column="lastLoginIp" property="lastloginip" jdbcType="VARCHAR" />
+		<result column="lastLoginArea" property="lastloginarea"
+			jdbcType="VARCHAR" />
+		<result column="diffAreaLogin" property="diffarealogin"
+			jdbcType="CHAR" />
+		<result column="regeistDate" property="regeistdate" jdbcType="TIMESTAMP" />
+		<result column="freezeStartdate" property="freezestartdate"
+			jdbcType="DATE" />
+		<result column="freezeEnddate" property="freezeenddate"
+			jdbcType="DATE" />
+		<result column="openId" property="openid" jdbcType="VARCHAR" />
+		<result column="accessToken" property="accesstoken" jdbcType="VARCHAR" />
+		<result column="alipayUseId" property="alipayuseid" jdbcType="VARCHAR" />
+		<result column="sinaWeiboID" property="sinaweiboid" jdbcType="VARCHAR" />
+		<result column="sex" property="sex" jdbcType="VARCHAR" />
+		<result column="trueName" property="truename" jdbcType="VARCHAR" />
+		<result column="birthday" property="birthday" jdbcType="DATE" />
+		<result column="province" property="province" jdbcType="VARCHAR" />
+		<result column="accountType" property="accounttype" jdbcType="VARCHAR" />
+		<result column="rank" property="rank" jdbcType="VARCHAR" />
+		<result column="score" property="score" jdbcType="INTEGER" />
+		<!-- <association property="rank" column="rank" javaType="com.fang.fangshop.core.bean.AccountRank"> 
+			<id column="id" property="id" jdbcType="INTEGER" /> <result column="code" 
+			property="code" jdbcType="VARCHAR" /> <result column="name" property="name" 
+			jdbcType="VARCHAR" /> </association> <association property="area" column="city" 
+			javaType="com.fang.fangshop.core.bean.AreaModel"> <id column="id" property="id"
+			jdbcType="INTEGER" /> <result column="code" property="code" jdbcType="VARCHAR" 
+			/> <result column="name" property="name" jdbcType="VARCHAR" /> </association> -->
+	</resultMap>
+
+	<!-- 查询所有记录 -->
+	<select id="account.selectAll" parameterType="com.fang.fangshop.core.bean.Account"
+		resultMap="AccountMap">
+		<!-- SELECT t.accounttype,t.account,t.nickname, (SELECT NAME FROM t_area 
+			a WHERE a.code=t.city) city,address,amount,tel, t.email,t.regeistdate,t.lastlogintime,t.lastloginip,t.freeze,t.lastloginarea,t.score 
+			FROM t_account t WHERE 1=1 -->
+		SELECT
+		*
+		FROM t_account t WHERE 1=1
+		<if test="account!=null and account!=''">
+			and account = #{account}
+		</if>
+		<if test="nickname!=null and nickname!=''">
+			and nickname like CONCAT('%','${nickname}','%' )
+		</if>
+		<if test="rank!=null and rank!=''">
+			and rank = #{rank}
+		</if>
+		<if test="freeze!=null and freeze!=''">
+			and freeze =#{freeze}
+		</if>
+		<if
+			test="starttime!=null and starttime!='' and endtime!=null and endtime!=''">
+			and regeistdate &gt; #{starttime} and regeistdate &lt; #{endtime}
+		</if>
+	</select>
+
+	<!-- 查询列表总记录数 -->
+	<select id="account.selectTotalCount" parameterType="com.fang.fangshop.core.bean.Account"
+		resultType="Integer">
+		SELECT COUNT(1) FROM t_account
+	</select>
+
+	<!-- 根据 id 删除 -->
+	<delete id="account.delete" parameterType="com.fang.fangshop.core.bean.Account">
+		DELETE FROM t_account
+		WHERE id=#{id}
+	</delete>
+
+	<!-- 插入数据 -->
+	<!-- <insert id="account.insert" parameterType="com.fang.fangshop.core.bean.Account"> 
+		insert into t_account (id, account, nickname, password, city, address, postcode, 
+		cardType, cardNO, grade, amount, tel, email, emailIsActive, freeze, lastLoginTime, 
+		lastLoginIp, lastLoginArea, diffAreaLogin, regeistDate, freezeStartdate, 
+		freezeEnddate, openId, accessToken, alipayUseId, sinaWeiboID, sex, trueName, 
+		birthday, province, accountType, rank, score ) values (#{id,jdbcType=INTEGER}, 
+		#{account,jdbcType=VARCHAR}, #{nickname,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
+		#{city,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, #{postcode,jdbcType=VARCHAR}, 
+		#{cardtype,jdbcType=VARCHAR}, #{cardno,jdbcType=VARCHAR}, #{grade,jdbcType=INTEGER}, 
+		#{amount,jdbcType=VARCHAR}, #{tel,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, 
+		#{emailisactive,jdbcType=VARCHAR}, #{freeze,jdbcType=VARCHAR}, #{lastlogintime,jdbcType=TIMESTAMP}, 
+		#{lastloginip,jdbcType=VARCHAR}, #{lastloginarea,jdbcType=VARCHAR}, #{diffarealogin,jdbcType=CHAR}, 
+		#{regeistdate,jdbcType=TIMESTAMP}, #{freezestartdate,jdbcType=DATE}, #{freezeenddate,jdbcType=DATE}, 
+		#{openid,jdbcType=VARCHAR}, #{accesstoken,jdbcType=VARCHAR}, #{alipayuseid,jdbcType=VARCHAR}, 
+		#{sinaweiboid,jdbcType=VARCHAR}, #{sex,jdbcType=VARCHAR}, #{truename,jdbcType=VARCHAR}, 
+		#{birthday,jdbcType=DATE}, #{province,jdbcType=VARCHAR}, #{accounttype,jdbcType=VARCHAR}, 
+		#{rank,jdbcType=VARCHAR}, #{score,jdbcType=INTEGER} ) </insert> -->
+	<insert id="account.insert" parameterType="com.fang.fangshop.core.bean.Account">
+		insert into t_account
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="account != null">
+				account,
+			</if>
+			<if test="nickname != null">
+				nickname,
+			</if>
+			<if test="password != null">
+				password,
+			</if>
+			<if test="city != null">
+				city,
+			</if>
+			<if test="address != null">
+				address,
+			</if>
+			<if test="postcode != null">
+				postcode,
+			</if>
+			<if test="cardtype != null">
+				cardType,
+			</if>
+			<if test="cardno != null">
+				cardNO,
+			</if>
+			<if test="grade != null">
+				grade,
+			</if>
+			<if test="amount != null">
+				amount,
+			</if>
+			<if test="tel != null">
+				tel,
+			</if>
+			<if test="email != null">
+				email,
+			</if>
+			<if test="emailisactive != null">
+				emailIsActive,
+			</if>
+			<if test="freeze != null">
+				freeze,
+			</if>
+			<if test="lastlogintime != null">
+				lastLoginTime,
+			</if>
+			<if test="lastloginip != null">
+				lastLoginIp,
+			</if>
+			<if test="lastloginarea != null">
+				lastLoginArea,
+			</if>
+			<if test="diffarealogin != null">
+				diffAreaLogin,
+			</if>
+			<if test="regeistdate != null">
+				regeistDate,
+			</if>
+			<if test="freezestartdate != null">
+				freezeStartdate,
+			</if>
+			<if test="freezeenddate != null">
+				freezeEnddate,
+			</if>
+			<if test="openid != null">
+				openId,
+			</if>
+			<if test="accesstoken != null">
+				accessToken,
+			</if>
+			<if test="alipayuseid != null">
+				alipayUseId,
+			</if>
+			<if test="sinaweiboid != null">
+				sinaWeiboID,
+			</if>
+			<if test="sex != null">
+				sex,
+			</if>
+			<if test="truename != null">
+				trueName,
+			</if>
+			<if test="birthday != null">
+				birthday,
+			</if>
+			<if test="province != null">
+				province,
+			</if>
+			<if test="accounttype != null">
+				accountType,
+			</if>
+			<if test="rank != null">
+				rank,
+			</if>
+			<if test="score != null">
+				score,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="account != null">
+				#{account,jdbcType=VARCHAR},
+			</if>
+			<if test="nickname != null">
+				#{nickname,jdbcType=VARCHAR},
+			</if>
+			<if test="password != null">
+				#{password,jdbcType=VARCHAR},
+			</if>
+			<if test="city != null">
+				#{city,jdbcType=VARCHAR},
+			</if>
+			<if test="address != null">
+				#{address,jdbcType=VARCHAR},
+			</if>
+			<if test="postcode != null">
+				#{postcode,jdbcType=VARCHAR},
+			</if>
+			<if test="cardtype != null">
+				#{cardtype,jdbcType=VARCHAR},
+			</if>
+			<if test="cardno != null">
+				#{cardno,jdbcType=VARCHAR},
+			</if>
+			<if test="grade != null">
+				#{grade,jdbcType=INTEGER},
+			</if>
+			<if test="amount != null">
+				#{amount,jdbcType=VARCHAR},
+			</if>
+			<if test="tel != null">
+				#{tel,jdbcType=VARCHAR},
+			</if>
+			<if test="email != null">
+				#{email,jdbcType=VARCHAR},
+			</if>
+			<if test="emailisactive != null">
+				#{emailisactive,jdbcType=VARCHAR},
+			</if>
+			<if test="freeze != null">
+				#{freeze,jdbcType=VARCHAR},
+			</if>
+			<if test="lastlogintime != null">
+				#{lastlogintime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="lastloginip != null">
+				#{lastloginip,jdbcType=VARCHAR},
+			</if>
+			<if test="lastloginarea != null">
+				#{lastloginarea,jdbcType=VARCHAR},
+			</if>
+			<if test="diffarealogin != null">
+				#{diffarealogin,jdbcType=CHAR},
+			</if>
+			<if test="regeistdate != null">
+				#{regeistdate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="freezestartdate != null">
+				#{freezestartdate,jdbcType=DATE},
+			</if>
+			<if test="freezeenddate != null">
+				#{freezeenddate,jdbcType=DATE},
+			</if>
+			<if test="openid != null">
+				#{openid,jdbcType=VARCHAR},
+			</if>
+			<if test="accesstoken != null">
+				#{accesstoken,jdbcType=VARCHAR},
+			</if>
+			<if test="alipayuseid != null">
+				#{alipayuseid,jdbcType=VARCHAR},
+			</if>
+			<if test="sinaweiboid != null">
+				#{sinaweiboid,jdbcType=VARCHAR},
+			</if>
+			<if test="sex != null">
+				#{sex,jdbcType=VARCHAR},
+			</if>
+			<if test="truename != null">
+				#{truename,jdbcType=VARCHAR},
+			</if>
+			<if test="birthday != null">
+				#{birthday,jdbcType=DATE},
+			</if>
+			<if test="province != null">
+				#{province,jdbcType=VARCHAR},
+			</if>
+			<if test="accounttype != null">
+				#{accounttype,jdbcType=VARCHAR},
+			</if>
+			<if test="rank != null">
+				#{rank,jdbcType=VARCHAR},
+			</if>
+			<if test="score != null">
+				#{score,jdbcType=INTEGER},
+			</if>
+		</trim>
+	</insert>
+
+	<!-- 冻结 -->
+	<update id="account.updateFreeze" parameterType="com.fang.fangshop.core.bean.Account">
+		update t_account
+		<set>
+			<if test="freeze !=null">
+				freeze=#{freeze},
+			</if> 
+			<if test="freezestartdate !=null">
+				freezestartdate=#{freezestartdate},
+			</if>
+			<if test="freezeenddate !=null">
+				freezeenddate=#{freezeenddate}
+			</if>
+			
+		</set>
+		where id = #{id}
+	</update>
+
+	<!-- 根据 id 更新数据 -->
+	<update id="account.update" parameterType="com.fang.fangshop.core.bean.Account">
+		update t_account
+		<set>
+			<if test="account != null">
+				account = #{account,jdbcType=VARCHAR},
+			</if>
+			<if test="nickname != null">
+				nickname = #{nickname,jdbcType=VARCHAR},
+			</if>
+			<if test="password != null">
+				password = #{password,jdbcType=VARCHAR},
+			</if>
+			<if test="city != null">
+				city = #{city,jdbcType=VARCHAR},
+			</if>
+			<if test="address != null">
+				address = #{address,jdbcType=VARCHAR},
+			</if>
+			<if test="postcode != null">
+				postcode = #{postcode,jdbcType=VARCHAR},
+			</if>
+			<if test="cardtype != null">
+				cardType = #{cardtype,jdbcType=VARCHAR},
+			</if>
+			<if test="cardno != null">
+				cardNO = #{cardno,jdbcType=VARCHAR},
+			</if>
+			<if test="grade != null">
+				grade = #{grade,jdbcType=INTEGER},
+			</if>
+			<if test="amount != null">
+				amount = #{amount,jdbcType=VARCHAR},
+			</if>
+			<if test="tel != null">
+				tel = #{tel,jdbcType=VARCHAR},
+			</if>
+			<if test="email != null">
+				email = #{email,jdbcType=VARCHAR},
+			</if>
+			<if test="emailisactive != null">
+				emailIsActive = #{emailisactive,jdbcType=VARCHAR},
+			</if>
+			<if test="freeze != null">
+				freeze = #{freeze,jdbcType=VARCHAR},
+			</if>
+			<if test="lastlogintime != null">
+				lastLoginTime = #{lastlogintime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="lastloginip != null">
+				lastLoginIp = #{lastloginip,jdbcType=VARCHAR},
+			</if>
+			<if test="lastloginarea != null">
+				lastLoginArea = #{lastloginarea,jdbcType=VARCHAR},
+			</if>
+			<if test="diffarealogin != null">
+				diffAreaLogin = #{diffarealogin,jdbcType=CHAR},
+			</if>
+			<if test="regeistdate != null">
+				regeistDate = #{regeistdate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="freezestartdate != null">
+				freezeStartdate = #{freezestartdate,jdbcType=DATE},
+			</if>
+			<if test="freezeenddate != null">
+				freezeEnddate = #{freezeenddate,jdbcType=DATE},
+			</if>
+			<if test="openid != null">
+				openId = #{openid,jdbcType=VARCHAR},
+			</if>
+			<if test="accesstoken != null">
+				accessToken = #{accesstoken,jdbcType=VARCHAR},
+			</if>
+			<if test="alipayuseid != null">
+				alipayUseId = #{alipayuseid,jdbcType=VARCHAR},
+			</if>
+			<if test="sinaweiboid != null">
+				sinaWeiboID = #{sinaweiboid,jdbcType=VARCHAR},
+			</if>
+			<if test="sex != null">
+				sex = #{sex,jdbcType=VARCHAR},
+			</if>
+			<if test="truename != null">
+				trueName = #{truename,jdbcType=VARCHAR},
+			</if>
+			<if test="birthday != null">
+				birthday = #{birthday,jdbcType=DATE},
+			</if>
+			<if test="province != null">
+				province = #{province,jdbcType=VARCHAR},
+			</if>
+			<if test="accounttype != null">
+				accountType = #{accounttype,jdbcType=VARCHAR},
+			</if>
+			<if test="rank != null">
+				rank = #{rank,jdbcType=VARCHAR},
+			</if>
+			<if test="score != null">
+				score = #{score,jdbcType=INTEGER},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update><!-- <update id="account.update" parameterType="com.fang.fangshop.core.bean.Account"> 
+		update t_account set account = #{account,jdbcType=VARCHAR}, nickname = #{nickname,jdbcType=VARCHAR}, 
+		password = #{password,jdbcType=VARCHAR}, city = #{city,jdbcType=VARCHAR}, 
+		address = #{address,jdbcType=VARCHAR}, postcode = #{postcode,jdbcType=VARCHAR}, 
+		cardType = #{cardtype,jdbcType=VARCHAR}, cardNO = #{cardno,jdbcType=VARCHAR}, 
+		grade = #{grade,jdbcType=INTEGER}, amount = #{amount,jdbcType=VARCHAR}, tel 
+		= #{tel,jdbcType=VARCHAR}, email = #{email,jdbcType=VARCHAR}, emailIsActive 
+		= #{emailisactive,jdbcType=VARCHAR}, freeze = #{freeze,jdbcType=VARCHAR}, 
+		lastLoginTime = #{lastlogintime,jdbcType=TIMESTAMP}, lastLoginIp = #{lastloginip,jdbcType=VARCHAR}, 
+		lastLoginArea = #{lastloginarea,jdbcType=VARCHAR}, diffAreaLogin = #{diffarealogin,jdbcType=CHAR}, 
+		regeistDate = #{regeistdate,jdbcType=TIMESTAMP}, freezeStartdate = #{freezestartdate,jdbcType=DATE}, 
+		freezeEnddate = #{freezeenddate,jdbcType=DATE}, openId = #{openid,jdbcType=VARCHAR}, 
+		accessToken = #{accesstoken,jdbcType=VARCHAR}, alipayUseId = #{alipayuseid,jdbcType=VARCHAR}, 
+		sinaWeiboID = #{sinaweiboid,jdbcType=VARCHAR}, sex = #{sex,jdbcType=VARCHAR}, 
+		trueName = #{truename,jdbcType=VARCHAR}, birthday = #{birthday,jdbcType=DATE}, 
+		province = #{province,jdbcType=VARCHAR}, accountType = #{accounttype,jdbcType=VARCHAR}, 
+		rank = #{rank,jdbcType=VARCHAR}, score = #{score,jdbcType=INTEGER} where 
+		id = #{id,jdbcType=INTEGER} </update> -->
+</mapper>

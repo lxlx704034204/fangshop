@@ -1,0 +1,61 @@
+package com.fang.fangshop.impl;
+
+import java.util.List;
+
+import javax.annotation.Resource;
+import com.fang.fangshop.core.been.Notice;
+import com.fang.fangshop.core.common.PageModel;
+import org.springframework.stereotype.Repository;
+import com.fang.fangshop.core.dao.BaseDao;
+import com.fang.fangshop.dao.INoticeDao;
+
+@Repository("noticeDao")
+public class NoticeDaoImpl implements INoticeDao {
+	@Resource
+	private BaseDao baseDao;
+	public void setBaseDao(BaseDao baseDao) {
+		this.baseDao = baseDao;
+	}
+	@Override
+	public int insert(Notice e) {
+		return baseDao.insert("manage.notice.insert", e);
+	}
+
+	@Override
+	public int delete(Notice e) {
+		return baseDao.delete("manage.notice.delete",e);
+	}
+
+	@Override
+	public int update(Notice e) {
+		return baseDao.update("manage.notice.update", e);
+	}
+
+	@Override
+	public Notice selectOne(Notice e) {
+		return baseDao.selectOne("manage.notice.selectById", e);
+	}
+
+	@Override
+	public PageModel selectPageList(Notice e) {
+		return baseDao.selectPageList("manage.notice.selectPageList",
+				"manage.notice.selectPageCount", e);
+	}
+
+	@Override
+	public List<Notice> selectList(Notice e) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int deleteById(int id) {
+		return baseDao.delete("manage.notice.delete",id);
+	}
+
+	@Override
+	public Notice selectById(String id) {
+		return baseDao.selectOne("manage.notice.selectById", id);
+	}
+
+}

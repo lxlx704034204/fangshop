@@ -1,0 +1,7 @@
+package com.fang.fangshop.web.controller;
+
+import com.fang.fangshop.web.framework.BaseController;
+
+public class AreaController extends BaseController {
+
+}

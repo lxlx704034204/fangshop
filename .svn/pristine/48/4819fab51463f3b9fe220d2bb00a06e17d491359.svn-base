@@ -1,0 +1,9 @@
+package com.fang.fangshop.dao;
+
+
+import com.fang.fangshop.been.PayModel;
+import com.fang.fangshop.core.dao.IDaoManager;
+
+public interface IPayDao extends IDaoManager<PayModel> {
+
+}

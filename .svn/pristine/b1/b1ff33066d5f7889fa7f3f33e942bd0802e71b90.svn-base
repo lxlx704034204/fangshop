@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC 
+"-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="manage.area">
+	<resultMap id="BaseResultMap" type="com.fang.fangshop.been.AreaModel" >
+	    <id column="id" property="id" jdbcType="INTEGER" />
+	    <result column="code" property="code" jdbcType="VARCHAR" />
+	    <result column="pcode" property="pcode" jdbcType="VARCHAR" />
+	    <result column="name" property="name" jdbcType="VARCHAR" />
+	    <result column="desc1" property="desc1" jdbcType="VARCHAR" />
+	    <result column="layer" property="layer" jdbcType="INTEGER" />
+	</resultMap>
+    <sql id="Base_Column_List" >
+        id, code, pcode, name, desc1, layer
+    </sql>
+	<select id="manage.area.selectAll" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+	    select
+        <include refid="Base_Column_List" />
+	    from t_area
+	    ORDER BY code,pcode
+  	</select>
+	<select id="manage.area.selectById" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+	    select
+        <include refid="Base_Column_List" />
+	    from t_area
+	    where id = #{_parameter}
+  	</select>
+  	<select id="manage.area.selectByCode" resultMap="BaseResultMap" parameterType="java.lang.String" >
+	    select
+        <include refid="Base_Column_List" />
+	    from t_area
+	    where pcode = #{code}
+	    ORDER BY CONVERT(NAME USING gbk) 
+  	</select>
+    <select id="manage.area.exists" parameterType="java.lang.String" resultType="int">
+        select count(*)
+        from t_area
+        WHERE 1=1
+        <if test="_parameter != null">
+            and code=#{code,jdbcType=VARCHAR}
+        </if>
+    </select>
+    <delete id="manage.area.deleteById" parameterType="java.lang.Integer" >
+        delete from t_area
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="manage.area.insert" parameterType="com.fang.fangshop.been.AreaModel" >
+        insert into t_area (id, code, pcode,
+        name, desc1, layer)
+        values (#{id,jdbcType=INTEGER}, #{code,jdbcType=VARCHAR}, #{pcode,jdbcType=VARCHAR},
+        #{name,jdbcType=VARCHAR}, #{desc1,jdbcType=VARCHAR}, #{layer,jdbcType=INTEGER})
+    </insert>
+    <insert id="manage.area.insertSelective" parameterType="com.fang.fangshop.been.AreaModel" >
+        insert into t_area
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="code != null" >
+                code,
+            </if>
+            <if test="pcode != null" >
+                pcode,
+            </if>
+            <if test="name != null" >
+                name,
+            </if>
+            <if test="desc1 != null" >
+                desc1,
+            </if>
+            <if test="layer != null" >
+                layer,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="code != null" >
+                #{code,jdbcType=VARCHAR},
+            </if>
+            <if test="pcode != null" >
+                #{pcode,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null" >
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="desc1 != null" >
+                #{desc1,jdbcType=VARCHAR},
+            </if>
+            <if test="layer != null" >
+                #{layer,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <update id="manage.area.updateById" parameterType="com.fang.fangshop.been.AreaModel" >
+        update t_area
+        set code = #{code,jdbcType=VARCHAR},
+        pcode = #{pcode,jdbcType=VARCHAR},
+        name = #{name,jdbcType=VARCHAR},
+        desc1 = #{desc1,jdbcType=VARCHAR},
+        layer = #{layer,jdbcType=INTEGER}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>

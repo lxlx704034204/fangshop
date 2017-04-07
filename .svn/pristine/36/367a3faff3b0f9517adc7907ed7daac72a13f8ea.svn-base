@@ -1,0 +1,78 @@
+package com.fang.fangshop.dao.impl;
+
+import com.fang.fangshop.core.common.PageModel;
+import com.fang.fangshop.core.dao.BaseDao;
+import com.fang.fangshop.dao.IMenuDao;
+import com.fang.fangshop.system.been.Menu;
+import org.springframework.stereotype.Repository;
+
+import javax.annotation.Resource;
+import java.util.List;
+
+@Repository("menuDao")
+public class MenuDaoImpl implements IMenuDao {
+	@Resource
+	private BaseDao baseDao;
+	public void setBaseDao(BaseDao baseDao) {
+		this.baseDao = baseDao;
+	}
+
+	@Override
+	public int insert(Menu t) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int update(Menu t) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int delete(Menu t) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int deleteById(int id) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public Menu selectOne(Menu t) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Menu> selectList(Menu t) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Menu> selectList(String statement) {
+		return baseDao.selectList(statement);
+	}
+
+	@Override
+	public List<Menu> selectList(String statement, Object param) {
+		return baseDao.selectList(statement, param);
+	}
+
+	@Override
+	public PageModel selectPageList(Menu e) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Menu selectById(String id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

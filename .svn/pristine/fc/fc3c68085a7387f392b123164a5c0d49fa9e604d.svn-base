@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC 
+"-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="manage.menu">
+   <select id="manage.menu.selectList" parameterType="hashMap" resultType="com.fang.fangshop.core.system.been.Menu">
+      SELECT m.* FROM t_menu m,t_privilege p WHERE m.id=p.mid 
+      <if test="rid!=null and rid!=''">
+          AND p.rid=#{rid}
+      </if> 
+      <if test="id!=null and id!=''">
+          and m.id=#{id}
+      </if>
+      <if test="pid!=null and pid!=''">
+          and m.pid=#{pid}
+      </if>
+      ORDER BY m.orderNum
+   </select>
+</mapper>

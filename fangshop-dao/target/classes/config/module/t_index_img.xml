@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="manage.indeximg" >
+  <resultMap id="BaseResultMap" type="com.fang.fangshop.core.been.IndexImg" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="picture" property="picture" jdbcType="VARCHAR" />
+    <result column="order1" property="order1" jdbcType="INTEGER" />
+    <result column="desc1" property="desc1" jdbcType="VARCHAR" />
+    <result column="link" property="link" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, title, picture, order1, desc1, link
+  </sql>
+  <select id="manage.indeximg.selectPageList" parameterType="com.fang.fangshop.core.been.IndexImg"
+	resultMap="BaseResultMap">
+	select
+	<include refid="Base_Column_List" />
+	from t_index_img
+	where 1=1
+	<if test="id!=null and id!=''">
+		and id=#{id}
+	</if>
+	<if test="title!=null and title!=''">
+		and title like '%${title}%'
+	</if>
+	order by id desc
+	limit #{offset},#{pageSize}
+  </select>
+  <select id="manage.indeximg.selectPageCount" parameterType="com.fang.fangshop.core.been.IndexImg"
+	resultType="Integer">
+	select
+	count(1) as total
+	from t_index_img
+	where 1=1
+	<if test="id!=null and id!=''">
+		and id=#{id}
+	</if>
+	<if test="title!=null and title!=''">
+		and title like '%${title}%'
+	</if>
+  </select>  
+  <select id="manage.indeximg.selectById" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_index_img
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="manage.indeximg.deleteById" parameterType="java.lang.Integer" >
+    delete from t_index_img
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="manage.indeximg.insert" parameterType="com.fang.fangshop.core.been.IndexImg" >
+    insert into t_index_img (id, title, picture, 
+      order1, desc1, link
+      )
+    values (#{id,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, #{picture,jdbcType=VARCHAR}, 
+      #{order1,jdbcType=INTEGER}, #{desc1,jdbcType=VARCHAR}, #{link,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="manage.indeximg.insertSelective" parameterType="com.fang.fangshop.core.been.IndexImg" >
+    insert into t_index_img
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="title != null" >
+        title,
+      </if>
+      <if test="picture != null" >
+        picture,
+      </if>
+      <if test="order1 != null" >
+        order1,
+      </if>
+      <if test="desc1 != null" >
+        desc1,
+      </if>
+      <if test="link != null" >
+        link,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="title != null" >
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="picture != null" >
+        #{picture,jdbcType=VARCHAR},
+      </if>
+      <if test="order1 != null" >
+        #{order1,jdbcType=INTEGER},
+      </if>
+      <if test="desc1 != null" >
+        #{desc1,jdbcType=VARCHAR},
+      </if>
+      <if test="link != null" >
+        #{link,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="manage.indeximg.updateById" parameterType="com.fang.fangshop.core.been.IndexImg" >
+    update t_index_img
+    set title = #{title,jdbcType=VARCHAR},
+      picture = #{picture,jdbcType=VARCHAR},
+      order1 = #{order1,jdbcType=INTEGER},
+      desc1 = #{desc1,jdbcType=VARCHAR},
+      link = #{link,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

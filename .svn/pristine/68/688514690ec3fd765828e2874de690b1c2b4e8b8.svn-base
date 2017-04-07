@@ -1,0 +1,110 @@
+package com.fang.fangshop.services.impl;
+
+import java.util.List;
+import java.util.Set;
+import javax.annotation.Resource;
+
+import com.fang.fangshop.core.service.ServicesManager;
+import com.fang.fangshop.system.been.User;
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import com.fang.fangshop.core.cache.RedisCacheManager;
+import com.fang.fangshop.dao.IUserDao;
+import com.fang.fangshop.dao.impl.UserDaoImpl;
+import com.fang.fangshop.services.IUserService;
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.Transaction;
+import redis.clients.jedis.ZParams;
+
+@Service("userService")
+public class UserServiceImpl extends ServicesManager<User, UserDaoImpl> implements IUserService {
+	@Autowired
+	private IUserDao userDao;
+	@Autowired
+	private RedisCacheManager redisCacheManager;
+	@Resource(name = "userDao")
+	@Override
+	protected void setDao(UserDaoImpl dao) {
+		super.dao = dao;
+	}
+//
+//	/**
+//	 * 分页查询
+//	 */
+//	@SuppressWarnings({ "unchecked", "unused" })
+//	@Override
+//	public PageModel selectPageList(User t) {
+//		Integer total = 0;
+//		RedisCachePool pool = null;
+//		Jedis jedis = null;
+//		try {
+//			pool = redisCacheManager.getRedisPoolMap().get(RedisDataBaseType.defaultType.toString());
+//		    jedis = pool.getResource();
+//		    Transaction transaction = jedis.multi();
+//			RedisDao redisDao = new RedisDao(transaction);
+//			List<User> users = null;
+//			Set<String> sortKey = null;
+//
+//			String[] keys = genKeys(t);
+//			Integer start = t.getOffset()*t.getPageSize();
+//			Integer end = start + t.getPageSize() -1;
+//			if (keys != null && !StringUtils.isBlank(keys[1])) {
+//				String id = redisDao.zinterstore("user", new ZParams(), keys,60);
+//				// 获取健的集合
+//				redisDao.zrange("user",id,start,end);
+//				redisDao.del("user", id);
+//			} else {
+//				// 获取健的集合
+//				redisDao.zrange("user", "id", start,end);
+//			}
+//			List<Object> results = transaction.exec();
+//			total = ((Long)results.get(0)).intValue();
+//			sortKey = (Set<String>)results.get(1);
+//
+//			// 获取分页数据
+//			if (sortKey != null) {
+//				users = (List<User>) RedisDao.getListBeanByMap(sortKey, User.class,jedis.pipelined());
+//				//添加关联的角色数据
+//				if(users != null){
+//					for(User user:users){
+//						Role role = (Role)redisDao.getBeanByMap("role:" + user.getRid(),Role.class);
+//						user.setRole(role);
+//					}
+//				}
+//			}
+//			transaction.exec();
+//			// 返回数据
+//			PageModel pageModel = new PageModel();
+//			pageModel.setList(users);
+//			pageModel.setTotal(total);
+//			return pageModel;
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			// 获取数据库数据
+//			return userDao.selectPageList(t);
+//		} finally {
+//			pool.returnResource(jedis);
+//		}
+//	}
+//	/**
+//	 * 组装KEYS
+//	 * @param user
+//	 * @return
+//	 */
+//	private String[] genKeys(User user) {
+//		String[] string = null;
+//		StringBuilder sb = new StringBuilder();
+//
+//		if (!StringUtils.isBlank(user.getStatus())) {
+//			sb.append("," + "user:status:" + user.getStatus());
+//		}
+//		sb.append("," + "user:sort:id");
+//		if (null != sb.toString()) {
+//			// 去除第一个逗号
+//			String replaceString = sb.toString().replaceFirst(",", "");
+//			string = replaceString.split(",");
+//		}
+//		return string;
+//	}
+}

@@ -1,0 +1,76 @@
+package com.fang.fangshop.dao.impl;
+
+import com.fang.fangshop.been.ReportInfoModel;
+import com.fang.fangshop.core.dao.BaseDao;
+import com.fang.fangshop.dao.IReportInfoDao;
+import org.springframework.stereotype.Repository;
+
+import javax.annotation.Resource;
+import java.util.List;
+
+@Repository("reportInfoDao")
+public class ReportInfoDaoImpl implements IReportInfoDao {
+    @Resource
+	private BaseDao baseDao;
+	public void setBaseDao(BaseDao baseDao) {
+		this.baseDao = baseDao;
+	}
+	
+	@Override
+	public int insert(ReportInfoModel e) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int delete(ReportInfoModel e) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int update(ReportInfoModel e) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public ReportInfoModel selectOne(ReportInfoModel e) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ReportInfoModel selectPageList(ReportInfoModel e) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<ReportInfoModel> selectList(ReportInfoModel e) {
+		return baseDao.selectList("manage.order.selectOrderSales", e);
+	}
+
+	@Override
+	public int deleteById(int id) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public ReportInfoModel selectById(String id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<ReportInfoModel> getOrderSales(ReportInfoModel reportInfo) {
+		return baseDao.selectList("manage.order.selectOrderSales", reportInfo);
+	}
+
+	@Override
+	public List<ReportInfoModel> getProductSales(ReportInfoModel reportInfo) {
+		return baseDao.selectList("manage.order.selectProductSelleCount", reportInfo);
+	}
+
+}

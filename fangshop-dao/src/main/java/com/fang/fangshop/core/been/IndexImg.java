@@ -1,0 +1,99 @@
+package com.fang.fangshop.core.been;
+
+import com.fang.fangshop.core.cache.RedisCache;
+import com.fang.fangshop.core.cache.RedisFieldNotCache;
+import com.fang.fangshop.core.cache.RedisQuery;
+import com.fang.fangshop.core.common.PageModel;
+
+@RedisCache
+public class IndexImg extends PageModel {
+	@RedisFieldNotCache
+	private static final String className = "indeximg";
+	@RedisFieldNotCache
+	private static final String primaryKey = "id";
+    /** t_index_img.id */
+    private Integer id;
+
+    /** t_index_img.title */
+    @RedisQuery
+    private String title;
+
+    /** t_index_img.picture */
+    private String picture;
+
+    /** t_index_img.order1 */
+    @RedisQuery
+    private Integer order1;
+
+    /** t_index_img.desc1 */
+    private String desc1;
+
+    /** t_index_img.link */
+    private String link;
+
+    private static final long serialVersionUID = 1L;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title == null ? null : title.trim();
+    }
+
+    public String getPicture() {
+        return picture;
+    }
+
+    public void setPicture(String picture) {
+        this.picture = picture == null ? null : picture.trim();
+    }
+
+    public Integer getOrder1() {
+        return order1;
+    }
+
+    public void setOrder1(Integer order1) {
+        this.order1 = order1;
+    }
+
+    public String getDesc1() {
+        return desc1;
+    }
+
+    public void setDesc1(String desc1) {
+        this.desc1 = desc1 == null ? null : desc1.trim();
+    }
+
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(String link) {
+        this.link = link == null ? null : link.trim();
+    }
+
+	public IndexImg(Integer id, String title, String picture, Integer order1, String desc1, String link) {
+		super();
+		this.id = id;
+		this.title = title;
+		this.picture = picture;
+		this.order1 = order1;
+		this.desc1 = desc1;
+		this.link = link;
+	}
+
+	public IndexImg() {
+		super();
+	}
+    
+    
+}

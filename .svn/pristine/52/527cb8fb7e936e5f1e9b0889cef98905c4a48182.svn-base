@@ -1,0 +1,77 @@
+package com.fang.fangshop.dao.impl;
+
+import com.fang.fangshop.core.common.PageModel;
+import com.fang.fangshop.core.dao.BaseDao;
+import com.fang.fangshop.dao.IUserDao;
+import com.fang.fangshop.system.been.User;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
+@Repository("userDao")
+public class UserDaoImpl implements IUserDao {
+
+	@Autowired
+	private BaseDao dao;
+	public void setBaseDao(BaseDao dao){
+		this.dao=dao;
+	}
+	
+	@Override
+	public int insert(User t) {
+		String statement = "user.addUser";
+		return dao.insert(statement, t);
+	}
+
+	@Override
+	public int update(User t) {
+		String statement = "user.updateUser";
+		return dao.update(statement, t);
+	}
+
+	@Override
+	public int delete(User t) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int deleteById(int id) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public User selectOne(User t) {
+		String statement = "user.selectOne";
+		return dao.selectOne(statement,t);
+	}
+
+	@Override
+	public List<User> selectList(User t) {
+		String statement="user.selectList";
+		return dao.selectList(statement, t);
+	}
+	
+	/**
+	 * 分页查询
+	 * @param t
+	 * @return
+	 */
+	@Override
+	public PageModel selectPageList(User t){
+		String listStatement = "user.selectList";
+		String totalStatement = "user.selectTotalCount";
+		return dao.selectPageList(listStatement, totalStatement, t);
+	}
+
+	@Override
+	public User selectById(String id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	
+
+}

@@ -1,0 +1,33 @@
+package com.fang.fangshop.web.controller;
+
+import com.fang.fangshop.core.system.been.Menu;
+import com.fang.fangshop.web.framework.JsonResult;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import com.fang.fangshop.services.IMenuService;
+import com.fang.fangshop.web.framework.BaseController;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
+
+@Controller
+@RequestMapping("/manage/menu")
+public class MenuController extends BaseController {
+    @Autowired
+	private IMenuService menuService;
+    @RequestMapping("/getAllMenus")
+    @ResponseBody
+    public JsonResult getAllMenus(HttpServletRequest httpServletRequest){
+        int rid = Integer.parseInt(httpServletRequest.getParameter("rid"));
+        try {
+            List<Menu> list = menuService.selectAll(rid);
+            System.out.println(list);
+            return new JsonResult("success", list);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return new JsonResult("fail", ex.getMessage());
+        }
+    }
+}

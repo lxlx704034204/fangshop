@@ -1,0 +1,352 @@
+package com.fang.fangshop.web.controller;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import com.fang.fangshop.been.AreaModel;
+import com.fang.fangshop.been.OrderModel;
+import com.fang.fangshop.core.been.OrderLog;
+import com.fang.fangshop.core.been.OrderPay;
+import com.fang.fangshop.core.been.OrderShip;
+import com.fang.fangshop.core.common.Employee;
+import com.fang.fangshop.core.common.ExportExcelUtil;
+import com.fang.fangshop.core.common.PageModel;
+import com.fang.fangshop.web.framework.LoginUserHolder;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import com.fang.fangshop.services.IAreaService;
+import com.fang.fangshop.services.IOrderPayService;
+import com.fang.fangshop.services.IOrderService;
+import com.fang.fangshop.services.IOrderShipService;
+import com.fang.fangshop.web.framework.BaseController;
+import com.fang.fangshop.web.framework.JsonResult;
+
+@Controller
+@RequestMapping("/manage/order")
+public class OrderController extends BaseController {
+	@Autowired
+	private IOrderService orderService;
+	@Autowired
+	private IOrderPayService orderPayService;
+	@Autowired
+	private IOrderShipService orderShipService;
+	@Autowired
+	private IAreaService areaService;
+
+	private static final String page_toList = "manage/order/orderList";
+	private static final String page_toEdit = "manage/order/orderEdit";
+	private static final String page_toSend = "manage/order/sendProduct";
+	private static final String page_toShip = "manage/order/updateOrderShip";
+
+	@RequestMapping(value = "selectList", method = RequestMethod.GET)
+	public String selectList(@ModelAttribute("order") OrderModel order, ModelMap modelMap) {
+		modelMap.addAttribute("order", order);
+		return page_toList;
+	}
+
+	@RequestMapping(value = "toEdit", method = RequestMethod.GET)
+	public String toEdit(@ModelAttribute("e") OrderModel e, ModelMap modelMap) {
+		try {
+			modelMap.addAttribute("id", e.getId());
+		} catch (Exception e2) {
+			e2.printStackTrace();
+		}
+		return page_toEdit;
+	}
+
+	/**
+	 * 修改收货人信息
+	 * 
+	 * @param order
+	 * @param modelMap
+	 * @return
+	 */
+	@RequestMapping(value = "updateOrderShip", method = RequestMethod.GET)
+	public String updateOrderShip(@ModelAttribute("order") OrderModel order, ModelMap modelMap) {
+		try {
+			OrderShip orderShip = orderShipService.selectById(order.getId().toString());
+			List<AreaModel> areas = areaService.getListAll();
+			modelMap.addAttribute("areas", areas);
+			modelMap.addAttribute("orderShip", orderShip);
+		} catch (Exception e2) {
+			e2.printStackTrace();
+		}
+		return page_toShip;
+	}
+
+	/**
+	 * 跳转到发货页面
+	 * 
+	 * @return
+	 */
+	@RequestMapping(value = "getLogistics", method = RequestMethod.GET)
+	public String getLogistics(@ModelAttribute("order") OrderModel order, ModelMap map) {
+		map.addAttribute("id", order.getId());
+		return page_toSend;
+	}
+
+	/*
+	 * 分页查询
+	 */
+	@RequestMapping(value = "search", method = RequestMethod.POST)
+	@ResponseBody
+	public JsonResult search(@ModelAttribute("e") OrderModel e) throws Exception {
+		try {
+			PageModel pageModel = orderService.selectPageList(e);
+			return new JsonResult("success", pageModel);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			return new JsonResult("fail", ex.getMessage());
+		}
+	}
+
+	/**
+	 * 导出
+	 * 
+	 * @param httpServletResponse
+	 * @param e
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "exportExcel", method = RequestMethod.POST)
+	@ResponseBody
+	public JsonResult exportExcel(@ModelAttribute("e") OrderModel e) throws Exception {
+		try {
+			PageModel pageModel = orderService.selectPageList(e);
+
+			List<Object> employees = new ArrayList<Object>();
+			employees.add(new Employee(1000, "Jones", 40, "Manager", 2975));
+			employees.add(new Employee(1001, "Blake", 40, "Manager", 2850));
+			employees.add(new Employee(1002, "Clark", 40, "Manager", 2450));
+			employees.add(new Employee(1003, "Scott", 30, "Analyst", 3000));
+			employees.add(new Employee(1004, "King", 50, "President", 5000));
+			String[] titles = new String[] { "工号", "姓名", "年龄", "职称", "薪资（美元）", "入职时间" };
+		    ExportExcelUtil.exportExcel(response, "订单.xls", titles, employees);
+			return null;
+		} catch (Exception e2) {
+			e2.printStackTrace();
+			return null;
+		}
+	}
+
+	/**
+	 * 查找单个订单
+	 * 
+	 * @param e
+	 * @return
+	 */
+	@RequestMapping(value = "searchById", method = RequestMethod.POST)
+	@ResponseBody
+	public JsonResult searchById(@ModelAttribute("e") OrderModel e) {
+		try {
+			OrderModel order = orderService.selectById(e.getId().toString());
+			return new JsonResult("success", (Object) order);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			return new JsonResult("fail", ex.getMessage());
+		}
+	}
+
+	/**
+	 * 更新订单状态
+	 * 
+	 * @param order
+	 */
+	@RequestMapping(value = "updateOrderStatusById", method = RequestMethod.POST)
+	@ResponseBody
+	public JsonResult updateOrderStatusById(@ModelAttribute("order") OrderModel order) {
+		try {
+			OrderLog orderLog = new OrderLog();
+			if (order != null) {
+				orderLog.setOrderid(order.getId().toString());
+				orderLog.setAccount(LoginUserHolder.getLoginUser().getUsername());
+				orderLog.setCreatedate(new Date());
+				switch (order.getStatus()) {
+				case "pass":
+					orderLog.setContent("【审核通过】");
+					break;
+				case "send":
+					orderLog.setContent("【已发货】");
+					break;
+				case "sign":
+					orderLog.setContent("【已签收】");
+					break;
+				case "cancel":
+					orderLog.setContent("【已取消】");
+					break;
+				case "file":
+					orderLog.setContent("【已归档】");
+					break;
+				}
+				orderLog.setAccounttype("m");
+			}
+			orderService.updateOrderStatus(order, orderLog);
+			return new JsonResult("success");
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new JsonResult("fail");
+		}
+	}
+
+	/**
+	 * 修改订单总金额
+	 * 
+	 * @param order
+	 * @return
+	 */
+	@RequestMapping(value = "updateOrderAmount", method = RequestMethod.POST)
+	@ResponseBody
+	private JsonResult updateOrderAmount(@ModelAttribute("order") OrderModel order) {
+		try {
+			String result = checkStatus(order.getId(),BigDecimal.ZERO);
+			if (!org.apache.commons.lang.StringUtils.isBlank(result)) {
+				return new JsonResult(result);
+			}
+
+			OrderLog orderLog = new OrderLog();
+			if (order != null) {
+				orderLog.setOrderid(order.getId().toString());
+				orderLog.setAccount(LoginUserHolder.getLoginUser().getUsername());
+				orderLog.setCreatedate(new Date());
+				orderLog.setContent("【修改订单总金额】总金额修改为：" + order.getAmount());
+				orderLog.setAccounttype("m");
+			}
+			orderService.updateOrderStatus(order, orderLog);
+			return new JsonResult("success");
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new JsonResult("fail");
+		}
+	}
+
+	/**
+	 * 增加支付记录
+	 * 
+	 * @param orderPay
+	 * @return
+	 */
+	@RequestMapping(value = "insertOrderPay", method = RequestMethod.POST)
+	@ResponseBody
+	public JsonResult insertOrderPay(@ModelAttribute("orderPay") OrderPay orderPay) {
+		try {
+			String result = checkStatus(Integer.parseInt(orderPay.getOrderid()),orderPay.getPayamount());
+			if (!org.apache.commons.lang.StringUtils.isBlank(result)) {
+				return new JsonResult(result);
+			}
+
+			OrderLog orderLog = new OrderLog();
+			if (orderPay != null) {
+				orderPay.setCreatetime(new Date());
+				orderPay.setPaystatus("y");
+				orderPay.setPaymethod("zfb");
+				orderPay.setRemark("后台添加");
+
+				orderLog.setOrderid(orderPay.getOrderid().toString());
+				orderLog.setAccount(LoginUserHolder.getLoginUser().getUsername());
+				orderLog.setCreatedate(new Date());
+				orderLog.setContent("【增加支付记录】增：" + orderPay.getPayamount() + "￥;");
+				orderLog.setAccounttype("m");
+				orderPayService.insertToOderPay(orderPay, orderLog);
+				// 更新订单状态
+				OrderModel order = new OrderModel();
+				order.setId(Integer.parseInt(orderPay.getOrderid()));
+				order.setPaystatus("y");
+				orderService.update(order);
+			}
+			return new JsonResult("success");
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new JsonResult("fail");
+		}
+	}
+
+	/**
+	 * 发货快递页面
+	 * 
+	 * @param order
+	 * @return
+	 */
+	@RequestMapping(value = "sendOrder", method = RequestMethod.POST)
+	@ResponseBody
+	public JsonResult sendOrder(@ModelAttribute("order") OrderModel order) {
+		try {
+			orderService.update(order);
+			return new JsonResult("success");
+		} catch (Exception e) {
+			return new JsonResult("fail");
+		}
+	}
+
+	/**
+	 * 查询区域信息
+	 * 
+	 * @return
+	 */
+	@RequestMapping(value = "selectArea", method = RequestMethod.POST)
+	@ResponseBody
+	public JsonResult selectArea(String code) {
+		try {
+			List<AreaModel> areas = areaService.getAreaByCode(code);
+			return new JsonResult("success", areas);
+		} catch (Exception e) {
+			return new JsonResult("fail");
+		}
+	}
+
+	/**
+	 * 更新收货人信息
+	 * 
+	 * @return
+	 */
+	@RequestMapping(value = "updateOrderShip", method = RequestMethod.POST)
+	@ResponseBody
+	public JsonResult updateOrderShip(OrderShip orderShip) {
+		try {
+			if (org.apache.commons.lang.StringUtils.isBlank(orderShip.getShipname())) {
+				return new JsonResult("收货人不能为空！");
+			}
+			if (org.apache.commons.lang.StringUtils.isBlank(orderShip.getShipaddress())) {
+				return new JsonResult("收货人地址不能为空！");
+			}
+			if (org.apache.commons.lang.StringUtils.isBlank(orderShip.getTel())) {
+				return new JsonResult("收货人手机号码不能为空！");
+			}
+			if (org.apache.commons.lang.StringUtils.isBlank(orderShip.getProvince())) {
+				return new JsonResult("省份不能为空！");
+			}
+			if (org.apache.commons.lang.StringUtils.isBlank(orderShip.getCity())) {
+				return new JsonResult("城市不能为空！");
+			}
+			orderShipService.update(orderShip);
+			return new JsonResult("success", orderShip.getOrderid());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return new JsonResult("fail");
+	}
+
+	/**
+	 * 后台编辑订单页面，添加支付记录、修改订单总金额 操作之前需要进行如下的判断，这2个按钮的操作必须是订单为未审核 且 订单未支付
+	 * 才可以，否则抛出异常。
+	 */
+	public String checkStatus(int orderId, BigDecimal payAmount) {
+		OrderModel order = orderService.selectByOrderId(orderId);
+		if (!order.getStatus().equals("init") || !order.getPaystatus().equals("n")) {
+			return "未审核和未支付的订单才支持此操作！";
+		} else {
+			if (!payAmount.equals(BigDecimal.ZERO) && payAmount.compareTo(order.getAmount())!=0) {
+				System.out.println(order.getAmount());
+				return "支付金额不等于订单金额";
+			} else {
+				return null;
+			}
+		}
+	}
+}

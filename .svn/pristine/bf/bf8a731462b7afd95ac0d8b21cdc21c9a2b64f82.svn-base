@@ -1,0 +1,20 @@
+package com.fang.fangshop.services.impl;
+
+import javax.annotation.Resource;
+
+import com.fang.fangshop.core.common.PageModel;
+import com.fang.fangshop.core.service.ServicesManager;
+import com.fang.fangshop.system.been.Role;
+import org.springframework.stereotype.Service;
+import com.fang.fangshop.dao.impl.RoleDaoImpl;
+import com.fang.fangshop.services.IRoleService;
+
+@Service("roleService")
+public class RoleServiceImpl extends ServicesManager<Role, RoleDaoImpl> implements IRoleService {
+	@Resource(name="roleDao")
+	@Override
+	protected void setDao(RoleDaoImpl dao) {
+		super.dao = dao; 
+	}
+
+}
